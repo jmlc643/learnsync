@@ -1,4 +1,4 @@
-package com.learnsyc.appweb.overview;
+package com.learnsyc.appweb.models;
 
 public class Usuario {
     String nombre;

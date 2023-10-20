@@ -1,4 +1,4 @@
-package com.learnsyc.appweb.overview.controllers;
+package com.learnsyc.appweb.controllers;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.learnsyc.appweb.overview.Usuario;
+import com.learnsyc.appweb.models.Usuario;
 
 @RestController
 public class HomeController {

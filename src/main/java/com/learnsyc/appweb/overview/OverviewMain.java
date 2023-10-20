@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import com.learnsyc.appweb.models.Usuario;
+
 public class OverviewMain {
     static String AuthenticatedUsername = "anónimo";
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
