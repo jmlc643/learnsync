@@ -1,24 +1,24 @@
 package com.learnsyc.appweb.services;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.learnsyc.appweb.models.Usuario;
-import com.learnsyc.appweb.repositories.IUserRepository;
+import com.learnsyc.appweb.repositories.UserRepository;
 
 @Service
 public class UserService {
 
     @Autowired
-    IUserRepository userRepository;
+    UserRepository userRepository;
 
-    public ArrayList<Usuario> listarUsuarios() {
-        return userRepository.listarUsuarios();
+    public List<Usuario> listarUsuarios() {
+        return userRepository.findAll();
     }
 
     public Usuario guardarUsuario(Usuario usuario) {
-        return userRepository.guardarUsuario(usuario);
+        return userRepository.save(usuario);
     }
 }
