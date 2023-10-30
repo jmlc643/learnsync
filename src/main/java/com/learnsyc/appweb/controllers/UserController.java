@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.learnsyc.appweb.models.Usuario;
 import com.learnsyc.appweb.serializers.SaveUserRequest;
+import com.learnsyc.appweb.serializers.SaveUserResponse;
 import com.learnsyc.appweb.serializers.UserSerializer;
 import com.learnsyc.appweb.services.UserService;
 
@@ -28,8 +29,8 @@ public class UserController {
     }
 
     @PostMapping("/")
-    public String crearUsuario(@RequestBody SaveUserRequest request) {
+    public SaveUserResponse crearUsuario(@RequestBody SaveUserRequest request) {
         userService.guardarUsuario(new Usuario(request.getUser(), request.getPassword(), request.getEmail()));
-        return "ok";
+        return new SaveUserResponse("Guardado!");
     }
 }
