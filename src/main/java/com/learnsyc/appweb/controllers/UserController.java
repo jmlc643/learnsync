@@ -30,7 +30,8 @@ public class UserController {
 
     @PostMapping("/")
     public SaveUserResponse crearUsuario(@RequestBody SaveUserRequest request) {
-        userService.guardarUsuario(new Usuario(null, request.getUser(), request.getPassword(), request.getEmail()));
+        Usuario usuario = new Usuario(null, request.getUser(), request.getPassword(), request.getEmail());
+        userService.guardarUsuario(usuario);
         return new SaveUserResponse("Guardado!");
     }
 }

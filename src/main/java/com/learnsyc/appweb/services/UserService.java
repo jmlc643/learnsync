@@ -19,6 +19,7 @@ public class UserService {
     }
 
     public Usuario guardarUsuario(Usuario usuario) {
+        //enviar correo
         return userRepository.save(usuario);
     }
 }
