@@ -7,4 +7,10 @@ import java.time.*; //Para las fechas
 public class Comentario {
     String mensaje;
     final LocalDateTime fechaCreacion = LocalDateTime.now();
+    boolean esEditado;
+
+    public Comentario(String mensaje){
+        this.mensaje = mensaje;
+        esEditado = false;
+    }
 }

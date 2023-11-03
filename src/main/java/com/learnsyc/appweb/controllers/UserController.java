@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.learnsyc.appweb.models.Usuario;
-import com.learnsyc.appweb.serializers.SaveUserRequest;
-import com.learnsyc.appweb.serializers.SaveUserResponse;
-import com.learnsyc.appweb.serializers.UserSerializer;
+import com.learnsyc.appweb.serializers.usuario.SaveUserRequest;
+import com.learnsyc.appweb.serializers.usuario.SaveUserResponse;
+import com.learnsyc.appweb.serializers.usuario.UserSerializer;
 import com.learnsyc.appweb.services.UserService;
 
 @RestController
