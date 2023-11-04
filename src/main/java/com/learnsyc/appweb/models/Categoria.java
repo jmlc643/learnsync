@@ -12,7 +12,8 @@ import lombok.AllArgsConstructor;
 public class Categoria {
     @Id //Identifica a la primary key
     @GeneratedValue(strategy= GenerationType.AUTO) //Hace un autoincrement
-    @Column(name="idCategorias") //Para que ubique a que columna agregar el valor
+    //Column hibernate name strategy googlear despues
+    @Column(name="id_categorias") //Para que ubique a que columna agregar el valor
     Long idCategorias;
     @Column(name="nombre")
     String nombre;

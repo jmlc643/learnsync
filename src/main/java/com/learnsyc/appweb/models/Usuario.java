@@ -11,7 +11,7 @@ import jakarta.persistence.*;
 public class Usuario {
     @Id //Identifica a la primary key
     @GeneratedValue(strategy= GenerationType.AUTO) //Hace un autoincrement
-    @Column(name="idUsuario") //Para que ubique a que columna agregar el valor
+    @Column(name="id_usuario") //Para que ubique a que columna agregar el valor
     Long idUsuario;
     @Column(name="user")
     String user;
@@ -19,17 +19,17 @@ public class Usuario {
     String password;
     @Column(name="email")
     String email;
-    @Column(name="esAdmin")
+    @Column(name="es_admin")
     boolean esAdmin;
-    @Column(name="fechaCreacion")
+    @Column(name="fecha_creacion")
     final LocalDate fechaCreacion = LocalDate.now();
-    @Column(name="inicioSuspension")
+    @Column(name="inicio_suspension")
     LocalDateTime inicioSuspension;
-    @Column(name="finSuspension")
+    @Column(name="fin_suspension")
     LocalDateTime finSuspension;
     @Column(name="baneado")
     boolean baneado;
-    @Column(name="nroReportes")
+    @Column(name="nro_reportes")
     int nroReportes;
 
     public Usuario(Long idUsuario, String user, String password, String email){
