@@ -22,7 +22,7 @@ public class CategoriaService {
         return categoriaRepository.save(categoria);
     }
 
-    public List<Categoria> asignarCategoria(String nombre){
+    public Categoria encontrarCategoria(String nombre){
         return categoriaRepository.findByNombre(nombre);
     }
 }

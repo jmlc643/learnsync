@@ -6,4 +6,5 @@ import com.learnsyc.appweb.models.Categoria;
 
 @Repository
 public interface CategoriaRepository extends JpaRepository<Categoria, Long>{
+    public Categoria findByNombre(String nombre);
 }

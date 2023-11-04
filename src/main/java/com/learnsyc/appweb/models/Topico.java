@@ -14,15 +14,14 @@ import com.learnsyc.appweb.models.Categoria;
 public class Topico {
     @Id //Identifica a la primary key
     @GeneratedValue(strategy= GenerationType.AUTO) //Hace un autoincrement
-    @Column(name="idTopico") //Para que ubique a que columna agregar el valor
+    @Column(name="id_topico") //Para que ubique a que columna agregar el valor
     Long idTopico;
     @Column(name="nombre")
     String nombre;
     @Column(name="descripcion")
     String descripcion;
-    @Column(name="fechaCreacion")
+    @Column(name="fecha_creacion")
     final LocalDateTime fechaCreacion = LocalDateTime.now();
-    @Id
     @JoinColumns({
         @JoinColumn(name="id_categorias", referencedColumnName="id_categorias")
     })

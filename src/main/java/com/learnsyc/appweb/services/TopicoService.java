@@ -13,8 +13,6 @@ public class TopicoService {
     
     @Autowired
     TopicoRepository topicoRepository;
-    @Autowired
-    CategoriaService categoriaService;
 
     public List<Topico> listarTopico(){
         return topicoRepository.findAll();

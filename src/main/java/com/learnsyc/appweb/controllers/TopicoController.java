@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.learnsyc.appweb.models.Topico;
 import com.learnsyc.appweb.models.Categoria;
+import com.learnsyc.appweb.serializers.categoria.CategoriaSerializer;
 import com.learnsyc.appweb.serializers.topico.TopicoSerializer;
 import com.learnsyc.appweb.serializers.topico.SaveTopicoRequest;
 import com.learnsyc.appweb.services.TopicoService;
@@ -26,13 +27,13 @@ public class TopicoController {
 
     @GetMapping("/")
     public List<TopicoSerializer> listarTopico() {
-        return topicoService.listarTopico().stream().map((it) -> new TopicoSerializer(it.getNombre(), it.getDescripcion(), it.getCategoria())).toList();
+        return topicoService.listarTopico().stream().map((it) -> new TopicoSerializer(it.getNombre(), it.getDescripcion(), new CategoriaSerializer(it.getCategoria().getNombre(), it.getCategoria().getDescripcion()))).toList();
     }
 
     @PostMapping("/")
     public Topico crearTopico(@RequestBody SaveTopicoRequest request) {
-        Categoria categoria = categoriaService.asignarCategoria(request.getNombreCategoria());
-        Topico topico = new Topico(null, request.getNombre(), request.getDescripcion(), categoria.getIdCategorias(), categoria);
+        Categoria categoria = categoriaService.encontrarCategoria(request.getNombreCategoria());
+        Topico topico = new Topico(null, request.getNombre(), request.getDescripcion(), categoria);
         topicoService.guardarTopico(topico);
         return topico;
     }
