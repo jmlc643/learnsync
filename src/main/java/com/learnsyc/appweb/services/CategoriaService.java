@@ -21,4 +21,8 @@ public class CategoriaService {
     public Categoria guardarCategoria(Categoria categoria){
         return categoriaRepository.save(categoria);
     }
+
+    public List<Categoria> asignarCategoria(String nombre){
+        return categoriaRepository.findByNombre(nombre);
+    }
 }
