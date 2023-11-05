@@ -20,4 +20,8 @@ public class HiloService {
     public Hilo guardarHilo(Hilo hilo){
         return hiloRepository.save(hilo);
     }
+
+    public Hilo encontrarHIlo(String titulo){
+        return hiloRepository.findByTitulo(titulo);
+    }
 }

@@ -27,7 +27,10 @@ public class HiloController {
 
     @GetMapping("/")
     public List<HiloSerializer> listarHilo() {
-        return hiloService.listarHilo().stream().map((it) -> new HiloSerializer(it.getTitulo(), it.getMensaje(), new TopicoSerializer(it.getTopico().getNombre(), it.getTopico().getDescripcion(), new CategoriaSerializer(it.getTopico().getCategoria().getNombre(), it.getTopico().getCategoria().getDescripcion())), new UserSerializer(it.getUsuario().getUser(), it.getUsuario().getEmail()))).toList();
+        return hiloService.listarHilo().stream().map((it) -> new HiloSerializer(it.getTitulo(), it.getMensaje(),
+                new TopicoSerializer(it.getTopico().getNombre(), it.getTopico().getDescripcion(),
+                new CategoriaSerializer(it.getTopico().getCategoria().getNombre(), it.getTopico().getCategoria().getDescripcion())),
+                new UserSerializer(it.getUsuario().getUser(), it.getUsuario().getEmail()))).toList();
     }
 
     @PostMapping("/")
