@@ -1,16 +1,17 @@
 package com.learnsyc.appweb.models;
 
 import java.time.*;
-import jakarta.persistence.*;
-import lombok.NoArgsConstructor; 
-import lombok.Data;
+
 import lombok.AllArgsConstructor;
+import lombok.Data;
+import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
 import com.learnsyc.appweb.models.Categoria;
 @Data
-@Table(name="topicos") //Da a entender que sera un modelo de base de datos
-@Entity //Da a entender que sera una entidad de base de datos
-@NoArgsConstructor //Genera constructor vacio
+@Table(name="topicos")
+@Entity
 @AllArgsConstructor
+@NoArgsConstructor
 public class Topico {
     @Id //Identifica a la primary key
     @GeneratedValue(strategy= GenerationType.AUTO) //Hace un autoincrement
@@ -22,6 +23,7 @@ public class Topico {
     String descripcion;
     @Column(name="fecha_creacion")
     final LocalDateTime fechaCreacion = LocalDateTime.now();
+    //Cambiar a guion bajo los name
     @JoinColumns({
         @JoinColumn(name="id_categorias", referencedColumnName="id_categorias")
     })

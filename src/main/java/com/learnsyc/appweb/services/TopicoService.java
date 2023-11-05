@@ -2,6 +2,7 @@ package com.learnsyc.appweb.services;
 
 import java.util.List;
 
+import com.learnsyc.appweb.models.Categoria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,5 +21,9 @@ public class TopicoService {
 
     public Topico guardarTopico(Topico topico){
         return topicoRepository.save(topico);
+    }
+
+    public Topico encontrarTopico(String nombre) {
+        return topicoRepository.findByNombre(nombre);
     }
 }

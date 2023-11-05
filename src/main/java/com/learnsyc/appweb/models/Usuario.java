@@ -1,8 +1,9 @@
 package com.learnsyc.appweb.models;
 
 import java.time.*; //Para las fechas
-import lombok.Data; 
-import lombok.NoArgsConstructor; 
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import jakarta.persistence.*; 
 @Data //Construye métodos Set, Get, toString
 @Table(name="usuarios") //Da a entender que sera un modelo de base de datos

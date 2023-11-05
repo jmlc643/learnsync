@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.learnsyc.appweb.models.Topico;
 import com.learnsyc.appweb.models.Categoria;
-import com.learnsyc.appweb.serializers.categoria.CategoriaSerializer;
 import com.learnsyc.appweb.serializers.topico.TopicoSerializer;
+import com.learnsyc.appweb.serializers.categoria.CategoriaSerializer;
 import com.learnsyc.appweb.serializers.topico.SaveTopicoRequest;
 import com.learnsyc.appweb.services.TopicoService;
 import com.learnsyc.appweb.services.CategoriaService;
