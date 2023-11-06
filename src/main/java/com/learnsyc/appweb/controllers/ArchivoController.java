@@ -11,6 +11,7 @@ import com.learnsyc.appweb.serializers.topico.TopicoSerializer;
 import com.learnsyc.appweb.serializers.usuario.UserSerializer;
 import com.learnsyc.appweb.services.ArchivoService;
 import com.learnsyc.appweb.services.ComentarioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +36,7 @@ public class ArchivoController {
     }
 
     @PostMapping("/")
-    public Archivo subirArchivo(@RequestBody SaveArchivoRequest request){
+    public Archivo subirArchivo(@Valid @RequestBody SaveArchivoRequest request){
         Comentario comentario = comentarioService.encontrarComentario(request.getId());
         Archivo archivo = new Archivo(null, request.getNombre(), request.getTipo(), request.getLink(), comentario);
         archivoService.guardarArchivo(archivo);

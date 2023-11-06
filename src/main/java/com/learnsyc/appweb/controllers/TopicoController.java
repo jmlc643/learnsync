@@ -3,6 +3,7 @@ package com.learnsyc.appweb.controllers;
 import java.util.List;
 
 import com.learnsyc.appweb.serializers.topico.*;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +26,7 @@ public class TopicoController {
     }
 
     @PostMapping("/")
-    public Topico crearTopico(@RequestBody SaveTopicoRequest request) {
+    public Topico crearTopico(@Valid @RequestBody SaveTopicoRequest request) {
         Categoria categoria = categoriaService.encontrarCategoria(request.getNombreCategoria());
         Topico topico = new Topico(null, request.getNombre(), request.getDescripcion(), categoria);
         topicoService.guardarTopico(topico);
@@ -33,7 +34,7 @@ public class TopicoController {
     }
 
     @PutMapping("/")
-    public Topico editarTopico(@RequestBody EditarTopicoRequest request){
+    public Topico editarTopico(@Valid @RequestBody EditarTopicoRequest request){
         Topico topico = topicoService.encontrarTopico(request.getCambiarTopico());
         topico.setNombre(request.getNombre());
         topico.setDescripcion(request.getDescripcion());
@@ -42,14 +43,14 @@ public class TopicoController {
     }
 
     @DeleteMapping("/")
-    public Topico eliminarTopico(@RequestBody EliminarTopicoRequest request){
+    public Topico eliminarTopico(@Valid @RequestBody EliminarTopicoRequest request){
         Topico topico = topicoService.encontrarTopico(request.getEliminarTopico());
         topicoService.eliminarTopico(topico.getIdTopico());
         return topico;
     }
 
     @GetMapping("/buscar/")
-    public TopicoSerializer buscarTopico(@RequestBody BuscarTopicoRequest request){
+    public TopicoSerializer buscarTopico(@Valid @RequestBody BuscarTopicoRequest request){
         //Buscar por hilos y comentarios (IDEA)
         try{
             Topico topico = topicoService.encontrarTopico(request.getNombre());

@@ -7,5 +7,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class DeleteComentarioRequest {
-    @NotNull Long id;
+    @NotNull(message = "Dato vacio")
+    Long id;
 }

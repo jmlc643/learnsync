@@ -14,6 +14,7 @@ import com.learnsyc.appweb.serializers.usuario.UserSerializer;
 import com.learnsyc.appweb.services.ComentarioService;
 import com.learnsyc.appweb.services.HiloService;
 import com.learnsyc.appweb.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,7 +39,7 @@ public class ComentarioController {
     }
 
     @PostMapping("/")
-    public Comentario crearComentario(@RequestBody SaveComentarioRequest request){
+    public Comentario crearComentario(@Valid @RequestBody SaveComentarioRequest request){
         Usuario usuario = userService.encontrarUsuario(request.getUsername());
         Hilo hilo = hiloService.encontrarHilo(request.getIdHilo());
         Comentario comentario = new Comentario(null, request.getMensaje(), hilo, usuario);
@@ -47,7 +48,7 @@ public class ComentarioController {
     }
 
     @PutMapping("/")
-    public Comentario editarComentario(@RequestBody EditComentarioRequest request){
+    public Comentario editarComentario(@Valid @RequestBody EditComentarioRequest request){
         Comentario comentario = comentarioService.encontrarComentario(request.getId());
         comentario.setMensaje(request.getMensaje());
         comentario.setEsEditado(true);
@@ -56,7 +57,7 @@ public class ComentarioController {
     }
 
     @DeleteMapping("/")
-    public Comentario eliminarComentario(@RequestBody DeleteComentarioRequest request){
+    public Comentario eliminarComentario(@Valid @RequestBody DeleteComentarioRequest request){
         Comentario comentario = comentarioService.encontrarComentario(request.getId());
         comentarioService.eliminarComentario(request.getId());
         return comentario;

@@ -10,6 +10,7 @@ import com.learnsyc.appweb.serializers.hilos.SaveHiloRequest;
 import com.learnsyc.appweb.services.HiloService;
 import com.learnsyc.appweb.services.TopicoService;
 import com.learnsyc.appweb.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +30,7 @@ public class HiloController {
     }
 
     @PostMapping("/")
-    public Hilo crearHilo(@RequestBody SaveHiloRequest request) {
+    public Hilo crearHilo(@Valid @RequestBody SaveHiloRequest request) {
         Usuario usuario = userService.encontrarUsuario(request.getUsername());
         Topico topico = topicoService.encontrarTopico(request.getTopicname());
         Hilo hilo = new Hilo(null, request.getTitulo(), request.getMensaje(), topico, usuario);
@@ -38,14 +39,14 @@ public class HiloController {
     }
 
     @DeleteMapping("/")
-    public Hilo eliminarHilo(@RequestBody DeleteHiloRequest request){
+    public Hilo eliminarHilo(@Valid @RequestBody DeleteHiloRequest request){
         Hilo hilo = hiloService.encontrarHilo(request.getId());
         hiloService.eliminarHilo(request.getId());
         return hilo;
     }
 
     @PostMapping("/cerrar/")
-    public HiloSerializer cerrarHilo(@RequestBody DeleteHiloRequest request){ //Uso la clase DeleteHiloRequest para reutilizar su unico atributo que tiene
+    public HiloSerializer cerrarHilo(@Valid @RequestBody DeleteHiloRequest request){ //Uso la clase DeleteHiloRequest para reutilizar su unico atributo que tiene
         Hilo hilo = hiloService.encontrarHilo(request.getId());
         hilo.setCerrado(true);
         hiloService.guardarCambios(hilo);
@@ -53,7 +54,7 @@ public class HiloController {
     }
 
     @PostMapping("/mover/")
-    public HiloSerializer moverHilo(@RequestBody MoveHiloRequest request){
+    public HiloSerializer moverHilo(@Valid @RequestBody MoveHiloRequest request){
         Hilo hilo = hiloService.encontrarHilo(request.getId());
         Topico topico = topicoService.encontrarTopico(request.getNombreTopico());
         hilo.setTopico(topico);
