@@ -8,4 +8,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class EliminarTopicoRequest {
     @NotNull String eliminarTopico;
+    //@NotNull Long id;
 }
