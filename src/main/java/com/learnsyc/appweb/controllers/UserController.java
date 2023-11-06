@@ -34,7 +34,7 @@ public class UserController {
         return new SaveUserResponse("Guardado!");
     }
 
-    @PostMapping("/authentication")
+    @PostMapping("/authentication/")
     public UserSerializer iniciarSesion(@RequestBody AuthenticationUserRequest request){
         try{
             Usuario usuario = userService.autenticarUsuario(request.getUser(), request.getPassword());
@@ -46,7 +46,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/suspender")
+    @PostMapping("/suspender/")
     public Usuario suspenderUsuario(@RequestBody SuspendedUserRequest request){
             Usuario usuario = userService.encontrarUsuario(request.getUser());
             usuario.setBaneado(true);
@@ -56,5 +56,19 @@ public class UserController {
             return usuario;
     }
 
+    @PostMapping("/banear/")
+    public Usuario banearUsuario(@RequestBody BanUserRequest request){
+        Usuario usuario = userService.encontrarUsuario(request.getUser());
+        usuario.setBaneado(true);
+        userService.guardarCambios(usuario);
+        return usuario;
+    }
 
+    @PostMapping("/desbanear/")
+    public Usuario desbanearUsuario(@RequestBody BanUserRequest request){
+        Usuario usuario = userService.encontrarUsuario(request.getUser());
+        usuario.setBaneado(false);
+        userService.guardarCambios(usuario);
+        return usuario;
+    }
 }
