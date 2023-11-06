@@ -21,11 +21,8 @@ public class CategoriaService {
     public Categoria guardarCategoria(Categoria categoria){
         return categoriaRepository.save(categoria);
     }
-<<<<<<< Updated upstream
-=======
 
     public Categoria encontrarCategoria(String nombre){
         return categoriaRepository.findByNombre(nombre);
     }
->>>>>>> Stashed changes
 }

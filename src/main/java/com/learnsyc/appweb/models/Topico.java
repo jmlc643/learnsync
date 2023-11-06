@@ -1,23 +1,26 @@
 package com.learnsyc.appweb.models;
 
 import java.time.*;
-import lombok.Data;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
+import com.learnsyc.appweb.models.Categoria;
 @Data
+@Table(name="topicos")
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class Topico {
-<<<<<<< Updated upstream
-=======
     @Id //Identifica a la primary key
     @GeneratedValue(strategy= GenerationType.AUTO) //Hace un autoincrement
     @Column(name="id_topico") //Para que ubique a que columna agregar el valor
     Long idTopico;
     @Column(name="nombre")
->>>>>>> Stashed changes
     String nombre;
+    @Column(name="descripcion")
     String descripcion;
-<<<<<<< Updated upstream
-    final LocalDateTime fechaCreacion = LocalDateTime.now();
-=======
     @Column(name="fecha_creacion")
     final LocalDateTime fechaCreacion = LocalDateTime.now();
     //Cambiar a guion bajo los name
@@ -26,5 +29,4 @@ public class Topico {
     })
     @ManyToOne
     Categoria categoria;
->>>>>>> Stashed changes
 }

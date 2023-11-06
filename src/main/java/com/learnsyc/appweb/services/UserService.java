@@ -22,4 +22,8 @@ public class UserService {
         //enviar correo
         return userRepository.save(usuario);
     }
+
+    public Usuario encontrarUsuario(String user) {
+        return userRepository.findByUser(user);
+    }
 }
