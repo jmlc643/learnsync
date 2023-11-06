@@ -2,16 +2,13 @@ package com.learnsyc.appweb.controllers;
 
 import java.util.List;
 
-import com.learnsyc.appweb.serializers.topico.EditarTopicoRequest;
-import com.learnsyc.appweb.serializers.topico.EliminarTopicoRequest;
+import com.learnsyc.appweb.serializers.topico.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.learnsyc.appweb.models.Topico;
 import com.learnsyc.appweb.models.Categoria;
-import com.learnsyc.appweb.serializers.topico.TopicoSerializer;
 import com.learnsyc.appweb.serializers.categoria.CategoriaSerializer;
-import com.learnsyc.appweb.serializers.topico.SaveTopicoRequest;
 import com.learnsyc.appweb.services.TopicoService;
 import com.learnsyc.appweb.services.CategoriaService;
 
@@ -49,5 +46,18 @@ public class TopicoController {
         Topico topico = topicoService.encontrarTopico(request.getEliminarTopico());
         topicoService.eliminarTopico(topico.getIdTopico());
         return topico;
+    }
+
+    @GetMapping("/buscar/")
+    public TopicoSerializer buscarTopico(@RequestBody BuscarTopicoRequest request){
+        //Buscar por hilos y comentarios (IDEA)
+        try{
+            Topico topico = topicoService.encontrarTopico(request.getNombre());
+            return new TopicoSerializer(topico.getNombre(), topico.getDescripcion(),
+                    new CategoriaSerializer(topico.getCategoria().getNombre(), topico.getCategoria().getDescripcion()));
+        }catch (Exception e){
+            System.out.println("No existe el topico "+request.getNombre());
+            return new TopicoSerializer();
+        }
     }
 }
