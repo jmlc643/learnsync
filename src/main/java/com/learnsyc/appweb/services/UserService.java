@@ -30,4 +30,6 @@ public class UserService {
     public Usuario autenticarUsuario(String user, String password){
         return userRepository.findByUserAndPassword(user, password);
     }
+
+    public Usuario guardarCambios(Usuario usuario){return userRepository.saveAndFlush(usuario);}
 }

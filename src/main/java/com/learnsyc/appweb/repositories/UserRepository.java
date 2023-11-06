@@ -8,4 +8,5 @@ import com.learnsyc.appweb.models.Usuario;
 public interface UserRepository extends JpaRepository<Usuario, Long> {
     Usuario findByUser(String user);
     Usuario findByUserAndPassword(String user, String password);
+    Usuario saveAndFlush(Usuario usuario);
 }

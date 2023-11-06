@@ -1,8 +1,9 @@
 package com.learnsyc.appweb.controllers;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-import com.learnsyc.appweb.serializers.usuario.AuthenticationUserRequest;
+import com.learnsyc.appweb.serializers.usuario.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,9 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.learnsyc.appweb.models.Usuario;
-import com.learnsyc.appweb.serializers.usuario.SaveUserRequest;
-import com.learnsyc.appweb.serializers.usuario.SaveUserResponse;
-import com.learnsyc.appweb.serializers.usuario.UserSerializer;
 import com.learnsyc.appweb.services.UserService;
 
 @RestController
@@ -36,7 +34,7 @@ public class UserController {
         return new SaveUserResponse("Guardado!");
     }
 
-    @PostMapping("/authentication")
+    @PostMapping("/authentication/")
     public UserSerializer iniciarSesion(@RequestBody AuthenticationUserRequest request){
         try{
             Usuario usuario = userService.autenticarUsuario(request.getUser(), request.getPassword());
@@ -46,5 +44,31 @@ public class UserController {
             System.out.println("Usuario no encontrado");
             return new UserSerializer("","");
         }
+    }
+
+    @PostMapping("/suspender/")
+    public Usuario suspenderUsuario(@RequestBody SuspendedUserRequest request){
+            Usuario usuario = userService.encontrarUsuario(request.getUser());
+            usuario.setBaneado(true);
+            usuario.setInicioSuspension(LocalDateTime.now());
+            usuario.setFinSuspension(request.getFinSuspension());
+            userService.guardarCambios(usuario);
+            return usuario;
+    }
+
+    @PostMapping("/banear/")
+    public Usuario banearUsuario(@RequestBody BanUserRequest request){
+        Usuario usuario = userService.encontrarUsuario(request.getUser());
+        usuario.setBaneado(true);
+        userService.guardarCambios(usuario);
+        return usuario;
+    }
+
+    @PostMapping("/desbanear/")
+    public Usuario desbanearUsuario(@RequestBody BanUserRequest request){
+        Usuario usuario = userService.encontrarUsuario(request.getUser());
+        usuario.setBaneado(false);
+        userService.guardarCambios(usuario);
+        return usuario;
     }
 }
