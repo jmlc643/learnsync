@@ -26,4 +26,8 @@ public class UserService {
     public Usuario encontrarUsuario(String user) {
         return userRepository.findByUser(user);
     }
+
+    public Usuario autenticarUsuario(String user, String password){
+        return userRepository.findByUserAndPassword(user, password);
+    }
 }

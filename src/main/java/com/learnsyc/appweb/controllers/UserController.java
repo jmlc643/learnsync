@@ -2,6 +2,7 @@ package com.learnsyc.appweb.controllers;
 
 import java.util.List;
 
+import com.learnsyc.appweb.serializers.usuario.AuthenticationUserRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,5 +34,17 @@ public class UserController {
         Usuario usuario = new Usuario(null, request.getUser(), request.getPassword(), request.getEmail());
         userService.guardarUsuario(usuario);
         return new SaveUserResponse("Guardado!");
+    }
+
+    @PostMapping("/authentication")
+    public UserSerializer iniciarSesion(@RequestBody AuthenticationUserRequest request){
+        try{
+            Usuario usuario = userService.autenticarUsuario(request.getUser(), request.getPassword());
+            UserSerializer usuarioEncontrado = new UserSerializer(usuario.getUser(), usuario.getEmail());
+            return usuarioEncontrado;
+        }catch (Exception e){
+            System.out.println("Usuario no encontrado");
+            return new UserSerializer("","");
+        }
     }
 }
