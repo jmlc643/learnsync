@@ -22,4 +22,6 @@ public class ComentarioService {
     }
 
     public Comentario guardarCambios(Comentario comentario){return comentarioRepository.saveAndFlush(comentario);}
+
+    public void eliminarComentario(Long id){comentarioRepository.deleteById(id);}
 }
