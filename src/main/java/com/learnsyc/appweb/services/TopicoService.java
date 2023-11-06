@@ -26,4 +26,12 @@ public class TopicoService {
     public Topico encontrarTopico(String nombre) {
         return topicoRepository.findByNombre(nombre);
     }
+
+    public Topico guardarCambios(Topico topico){
+        return topicoRepository.saveAndFlush(topico);
+    }
+
+    public void eliminarTopico(Long id){
+        topicoRepository.deleteById(id);
+    }
 }

@@ -8,6 +8,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class ComentarioSerializer {
+    Long id;
     String mensaje;
     HiloSerializer hiloSerializer;
     UserSerializer userSerializer;

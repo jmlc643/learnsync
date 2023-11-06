@@ -2,13 +2,10 @@ package com.learnsyc.appweb.controllers;
 
 import java.util.List;
 
+import com.learnsyc.appweb.serializers.topico.EditarTopicoRequest;
+import com.learnsyc.appweb.serializers.topico.EliminarTopicoRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.*;
 
 import com.learnsyc.appweb.models.Topico;
 import com.learnsyc.appweb.models.Categoria;
@@ -35,6 +32,22 @@ public class TopicoController {
         Categoria categoria = categoriaService.encontrarCategoria(request.getNombreCategoria());
         Topico topico = new Topico(null, request.getNombre(), request.getDescripcion(), categoria);
         topicoService.guardarTopico(topico);
+        return topico;
+    }
+
+    @PutMapping("/")
+    public Topico editarTopico(@RequestBody EditarTopicoRequest request){
+        Topico topico = topicoService.encontrarTopico(request.getCambiarTopico());
+        topico.setNombre(request.getNombre());
+        topico.setDescripcion(request.getDescripcion());
+        topicoService.guardarCambios(topico);
+        return topico;
+    }
+
+    @DeleteMapping("/")
+    public Topico eliminarTopico(@RequestBody EliminarTopicoRequest request){
+        Topico topico = topicoService.encontrarTopico(request.getEliminarTopico());
+        topicoService.eliminarTopico(topico.getIdTopico());
         return topico;
     }
 }
