@@ -6,8 +6,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class SaveComentarioRequest {
+public class EditComentarioRequest {
+    @NotNull Long id;
     @NotNull String mensaje;
-    @NotNull String username;
-    @NotNull Long idHilo;
 }

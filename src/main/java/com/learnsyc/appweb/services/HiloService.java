@@ -21,7 +21,7 @@ public class HiloService {
         return hiloRepository.save(hilo);
     }
 
-    public Hilo encontrarHIlo(String titulo){
-        return hiloRepository.findByTitulo(titulo);
+    public Hilo encontrarHIlo(Long id){
+        return hiloRepository.findByIdHilo(id);
     }
 }

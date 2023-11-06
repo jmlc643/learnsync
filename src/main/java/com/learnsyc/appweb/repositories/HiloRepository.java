@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface HiloRepository extends JpaRepository<Hilo, Long>{
-    Hilo findByTitulo(String titulo);
+    Hilo findByIdHilo(Long id);
 }

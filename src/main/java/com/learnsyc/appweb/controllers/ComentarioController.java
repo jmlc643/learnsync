@@ -5,6 +5,7 @@ import com.learnsyc.appweb.models.Hilo;
 import com.learnsyc.appweb.models.Usuario;
 import com.learnsyc.appweb.serializers.categoria.CategoriaSerializer;
 import com.learnsyc.appweb.serializers.comentario.ComentarioSerializer;
+import com.learnsyc.appweb.serializers.comentario.EditComentarioRequest;
 import com.learnsyc.appweb.serializers.comentario.SaveComentarioRequest;
 import com.learnsyc.appweb.serializers.hilos.HiloSerializer;
 import com.learnsyc.appweb.serializers.topico.TopicoSerializer;
@@ -27,7 +28,7 @@ public class ComentarioController {
 
     @GetMapping("/")
     public List<ComentarioSerializer> listarComentario(){
-        return comentarioService.listarComentario().stream().map((it) -> new ComentarioSerializer(it.getIdComentario(), it.getMensaje(),
+        return comentarioService.listarComentario().stream().map((it) -> new ComentarioSerializer(it.getIdComentario(), it.getMensaje(), it.isEsEditado(),
                 new HiloSerializer(it.getHilo().getIdHilo(), it.getHilo().getTitulo(), it.getHilo().getMensaje(),
                         new TopicoSerializer(it.getHilo().getTopico().getNombre(), it.getHilo().getTopico().getDescripcion(),
                         new CategoriaSerializer(it.getHilo().getTopico().getCategoria().getNombre(), it.getHilo().getTopico().getCategoria().getDescripcion())),
@@ -38,9 +39,18 @@ public class ComentarioController {
     @PostMapping("/")
     public Comentario crearComentario(@RequestBody SaveComentarioRequest request){
         Usuario usuario = userService.encontrarUsuario(request.getUsername());
-        Hilo hilo = hiloService.encontrarHIlo(request.getNombreHilo());
+        Hilo hilo = hiloService.encontrarHIlo(request.getIdHilo());
         Comentario comentario = new Comentario(null, request.getMensaje(), hilo, usuario);
         comentarioService.guardarComentario(comentario);
+        return comentario;
+    }
+
+    @PutMapping("/")
+    public Comentario editarComentario(@RequestBody EditComentarioRequest request){
+        Comentario comentario = comentarioService.encontrarComentario(request.getId());
+        comentario.setMensaje(request.getMensaje());
+        comentario.setEsEditado(true);
+        comentarioService.guardarCambios(comentario);
         return comentario;
     }
 }

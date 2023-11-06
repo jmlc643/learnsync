@@ -20,4 +20,6 @@ public class ComentarioService {
     public Comentario encontrarComentario(Long id){
         return comentarioRepository.findByIdComentario(id);
     }
+
+    public Comentario guardarCambios(Comentario comentario){return comentarioRepository.saveAndFlush(comentario);}
 }

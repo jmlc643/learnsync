@@ -10,6 +10,7 @@ import lombok.Data;
 public class ComentarioSerializer {
     Long id;
     String mensaje;
+    boolean esEditado;
     HiloSerializer hiloSerializer;
     UserSerializer userSerializer;
 }

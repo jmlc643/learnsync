@@ -26,7 +26,7 @@ public class ArchivoController {
     @GetMapping("/")
     public List<ArchivoSerializer> mostrarArchivo(){
         return archivoService.listarArchivo().stream().map((it) -> new ArchivoSerializer(it.getNombre(), it.getTipo(), it.getLink(),
-                new ComentarioSerializer(it.getComentario().getIdComentario(), it.getComentario().getMensaje(),
+                new ComentarioSerializer(it.getComentario().getIdComentario(), it.getComentario().getMensaje(), it.getComentario().isEsEditado(),
                         new HiloSerializer(it.getComentario().getHilo().getIdHilo(), it.getComentario().getHilo().getTitulo(), it.getComentario().getHilo().getMensaje(),
                                 new TopicoSerializer(it.getComentario().getHilo().getTopico().getNombre(), it.getComentario().getHilo().getTopico().getDescripcion(),
                                         new CategoriaSerializer(it.getComentario().getHilo().getTopico().getCategoria().getNombre(), it.getComentario().getHilo().getTopico().getCategoria().getDescripcion())),
