@@ -22,7 +22,7 @@ public class Usuario {
     String email;
     @Column(name="es_admin")
     boolean esAdmin;
-    @Column(name="fechaCreacion")
+    @Column(name="fecha_creacion")
     final LocalDate fechaCreacion = LocalDate.now();
     @Column(name="inicio_suspension")
     LocalDateTime inicioSuspension;
