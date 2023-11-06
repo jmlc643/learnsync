@@ -21,7 +21,9 @@ public class HiloService {
         return hiloRepository.save(hilo);
     }
 
-    public Hilo encontrarHIlo(Long id){
+    public Hilo encontrarHilo(Long id){
         return hiloRepository.findByIdHilo(id);
     }
+
+    public void eliminarHilo(Long id){hiloRepository.deleteById(id);}
 }

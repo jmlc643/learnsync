@@ -4,6 +4,7 @@ import com.learnsyc.appweb.models.Hilo;
 import com.learnsyc.appweb.models.Topico;
 import com.learnsyc.appweb.models.Usuario;
 import com.learnsyc.appweb.serializers.categoria.CategoriaSerializer;
+import com.learnsyc.appweb.serializers.hilos.DeleteHiloRequest;
 import com.learnsyc.appweb.serializers.hilos.HiloSerializer;
 import com.learnsyc.appweb.serializers.hilos.SaveHiloRequest;
 import com.learnsyc.appweb.serializers.topico.TopicoSerializer;
@@ -39,6 +40,13 @@ public class HiloController {
         Topico topico = topicoService.encontrarTopico(request.getTopicname());
         Hilo hilo = new Hilo(null, request.getTitulo(), request.getMensaje(), topico, usuario);
         hiloService.guardarHilo(hilo);
+        return hilo;
+    }
+
+    @DeleteMapping("/")
+    public Hilo eliminarHilo(@RequestBody DeleteHiloRequest request){
+        Hilo hilo = hiloService.encontrarHilo(request.getId());
+        hiloService.eliminarHilo(request.getId());
         return hilo;
     }
 }

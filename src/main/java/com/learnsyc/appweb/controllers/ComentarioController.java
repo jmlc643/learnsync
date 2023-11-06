@@ -40,7 +40,7 @@ public class ComentarioController {
     @PostMapping("/")
     public Comentario crearComentario(@RequestBody SaveComentarioRequest request){
         Usuario usuario = userService.encontrarUsuario(request.getUsername());
-        Hilo hilo = hiloService.encontrarHIlo(request.getIdHilo());
+        Hilo hilo = hiloService.encontrarHilo(request.getIdHilo());
         Comentario comentario = new Comentario(null, request.getMensaje(), hilo, usuario);
         comentarioService.guardarComentario(comentario);
         return comentario;
