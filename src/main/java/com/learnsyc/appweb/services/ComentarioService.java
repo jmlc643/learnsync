@@ -16,4 +16,8 @@ public class ComentarioService {
     public List<Comentario> listarComentario(){return comentarioRepository.findAll();}
 
     public Comentario guardarComentario(Comentario comentario){return comentarioRepository.save(comentario);}
+
+    public Comentario encontrarComentario(Long id){
+        return comentarioRepository.findByIdComentario(id);
+    }
 }

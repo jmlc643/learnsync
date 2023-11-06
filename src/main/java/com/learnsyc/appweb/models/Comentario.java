@@ -14,7 +14,7 @@ public class Comentario {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     @Column(name="id_comentario")
-    Long idHilo;
+    Long idComentario;
     @Column(name="mensaje")
     String mensaje;
     @Column(name="fecha_creacion")
@@ -33,8 +33,8 @@ public class Comentario {
     @ManyToOne
     Usuario usuario;
 
-    public Comentario(Long idHilo, String mensaje, Hilo hilo, Usuario usuario){
-        this.idHilo = idHilo;
+    public Comentario(Long idComentario, String mensaje, Hilo hilo, Usuario usuario){
+        this.idComentario = idComentario;
         this.mensaje = mensaje;
         esEditado = false;
         this.hilo = hilo;
