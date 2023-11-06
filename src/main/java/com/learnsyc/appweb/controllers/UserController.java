@@ -1,8 +1,9 @@
 package com.learnsyc.appweb.controllers;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-import com.learnsyc.appweb.serializers.usuario.AuthenticationUserRequest;
+import com.learnsyc.appweb.serializers.usuario.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,9 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.learnsyc.appweb.models.Usuario;
-import com.learnsyc.appweb.serializers.usuario.SaveUserRequest;
-import com.learnsyc.appweb.serializers.usuario.SaveUserResponse;
-import com.learnsyc.appweb.serializers.usuario.UserSerializer;
 import com.learnsyc.appweb.services.UserService;
 
 @RestController
@@ -47,4 +45,16 @@ public class UserController {
             return new UserSerializer("","");
         }
     }
+
+    @PostMapping("/suspender")
+    public Usuario suspenderUsuario(@RequestBody SuspendedUserRequest request){
+            Usuario usuario = userService.encontrarUsuario(request.getUser());
+            usuario.setBaneado(true);
+            usuario.setInicioSuspension(LocalDateTime.now());
+            usuario.setFinSuspension(request.getFinSuspension());
+            userService.guardarCambios(usuario);
+            return usuario;
+    }
+
+
 }
