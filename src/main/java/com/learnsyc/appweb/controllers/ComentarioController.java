@@ -30,7 +30,7 @@ public class ComentarioController {
     @GetMapping("/")
     public List<ComentarioSerializer> listarComentario(){
         return comentarioService.listarComentario().stream().map((it) -> new ComentarioSerializer(it.getIdComentario(), it.getMensaje(), it.isEsEditado(),
-                new HiloSerializer(it.getHilo().getIdHilo(), it.getHilo().getTitulo(), it.getHilo().getMensaje(),
+                new HiloSerializer(it.getHilo().getIdHilo(), it.getHilo().getTitulo(), it.getHilo().getMensaje(), it.getHilo().isCerrado(), it.getHilo().getFechaCreacion(),
                         new TopicoSerializer(it.getHilo().getTopico().getNombre(), it.getHilo().getTopico().getDescripcion(),
                         new CategoriaSerializer(it.getHilo().getTopico().getCategoria().getNombre(), it.getHilo().getTopico().getCategoria().getDescripcion())),
                         new UserSerializer(it.getHilo().getUsuario().getUser(), it.getHilo().getUsuario().getEmail())),

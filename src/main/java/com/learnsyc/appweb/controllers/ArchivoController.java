@@ -27,7 +27,7 @@ public class ArchivoController {
     public List<ArchivoSerializer> mostrarArchivo(){
         return archivoService.listarArchivo().stream().map((it) -> new ArchivoSerializer(it.getNombre(), it.getTipo(), it.getLink(),
                 new ComentarioSerializer(it.getComentario().getIdComentario(), it.getComentario().getMensaje(), it.getComentario().isEsEditado(),
-                        new HiloSerializer(it.getComentario().getHilo().getIdHilo(), it.getComentario().getHilo().getTitulo(), it.getComentario().getHilo().getMensaje(),
+                        new HiloSerializer(it.getComentario().getHilo().getIdHilo(), it.getComentario().getHilo().getTitulo(), it.getComentario().getHilo().getMensaje(), it.getComentario().getHilo().isCerrado(), it.getComentario().getHilo().getFechaCreacion(),
                                 new TopicoSerializer(it.getComentario().getHilo().getTopico().getNombre(), it.getComentario().getHilo().getTopico().getDescripcion(),
                                         new CategoriaSerializer(it.getComentario().getHilo().getTopico().getCategoria().getNombre(), it.getComentario().getHilo().getTopico().getCategoria().getDescripcion())),
                                 new UserSerializer(it.getComentario().getHilo().getUsuario().getUser(), it.getComentario().getHilo().getUsuario().getEmail())),

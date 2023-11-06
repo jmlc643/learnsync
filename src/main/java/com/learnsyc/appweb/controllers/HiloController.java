@@ -28,7 +28,7 @@ public class HiloController {
 
     @GetMapping("/")
     public List<HiloSerializer> listarHilo() {
-        return hiloService.listarHilo().stream().map((it) -> new HiloSerializer(it.getIdHilo(), it.getTitulo(), it.getMensaje(),
+        return hiloService.listarHilo().stream().map((it) -> new HiloSerializer(it.getIdHilo(), it.getTitulo(), it.getMensaje(), it.isCerrado(), it.getFechaCreacion(),
                 new TopicoSerializer(it.getTopico().getNombre(), it.getTopico().getDescripcion(),
                 new CategoriaSerializer(it.getTopico().getCategoria().getNombre(), it.getTopico().getCategoria().getDescripcion())),
                 new UserSerializer(it.getUsuario().getUser(), it.getUsuario().getEmail()))).toList();
@@ -48,5 +48,16 @@ public class HiloController {
         Hilo hilo = hiloService.encontrarHilo(request.getId());
         hiloService.eliminarHilo(request.getId());
         return hilo;
+    }
+
+    @PostMapping("/cerrar/")
+    public HiloSerializer cerrarHilo(@RequestBody DeleteHiloRequest request){
+        Hilo hilo = hiloService.encontrarHilo(request.getId());
+        hilo.setCerrado(true);
+        hiloService.guardarCambios(hilo);
+        return new HiloSerializer(hilo.getIdHilo(), hilo.getTitulo(), hilo.getMensaje(), hilo.isCerrado(), hilo.getFechaCreacion(),
+                new TopicoSerializer(hilo.getTopico().getNombre(), hilo.getTopico().getDescripcion(),
+                        new CategoriaSerializer(hilo.getTopico().getCategoria().getNombre(), hilo.getTopico().getCategoria().getDescripcion())),
+                new UserSerializer(hilo.getUsuario().getUser(), hilo.getUsuario().getEmail()));
     }
 }

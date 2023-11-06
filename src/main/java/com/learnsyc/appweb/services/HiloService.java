@@ -26,4 +26,6 @@ public class HiloService {
     }
 
     public void eliminarHilo(Long id){hiloRepository.deleteById(id);}
+
+    public Hilo guardarCambios(Hilo hilo){return hiloRepository.saveAndFlush(hilo);}
 }
