@@ -26,4 +26,6 @@ public class CategoriaService {
     public Categoria encontrarCategoria(String nombre){
         return categoriaRepository.findByNombre(nombre);
     }
+
+    public void eliminarCategoria(Long id){categoriaRepository.deleteById(id);}
 }
