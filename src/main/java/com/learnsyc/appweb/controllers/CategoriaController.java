@@ -25,15 +25,11 @@ public class CategoriaController {
 
     @PostMapping("/")
     public Categoria crearCategoria(@Valid @RequestBody CategoriaSerializer request) {
-        Categoria categoria = new Categoria(null, request.getNombre(), request.getDescripcion());
-        categoriaService.guardarCategoria(categoria);
-        return categoria;
+        return categoriaService.guardarCategoria(request);
     }
 
     @DeleteMapping("/")
     public Categoria eliminarCategoria(@Valid @RequestBody DeleteCategoriaRequest request){
-        Categoria categoria = categoriaService.encontrarCategoria(request.getNombre());
-        categoriaService.eliminarCategoria(categoria.getIdCategorias());
-        return categoria;
+        return categoriaService.eliminarCategoria(request);
     }
 }

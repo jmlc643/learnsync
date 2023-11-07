@@ -29,47 +29,28 @@ public class UserController {
     }
 
     @PostMapping("/")
-    public SaveUserResponse crearUsuario(@Valid @RequestBody SaveUserRequest request) {
-        Usuario usuario = new Usuario(null, request.getUser(), request.getPassword(), request.getEmail());
-        userService.guardarUsuario(usuario);
-        return new SaveUserResponse("Guardado!");
+    public Usuario crearUsuario(@Valid @RequestBody SaveUserRequest request) {
+        return userService.guardarUsuario(request);
+
     }
 
     @PostMapping("/authentication/")
     public UserSerializer iniciarSesion(@Valid @RequestBody AuthenticationUserRequest request){
-        try{
-            Usuario usuario = userService.autenticarUsuario(request.getUser(), request.getPassword());
-            UserSerializer usuarioEncontrado = new UserSerializer(usuario.getUser(), usuario.getEmail());
-            return usuarioEncontrado;
-        }catch (Exception e){
-            System.out.println("Usuario no encontrado");
-            return new UserSerializer("","");
-        }
+        return userService.autenticarUsuario(request);
     }
 
     @PostMapping("/suspender/")
     public Usuario suspenderUsuario(@Valid @RequestBody SuspendedUserRequest request){
-            Usuario usuario = userService.encontrarUsuario(request.getUser());
-            usuario.setBaneado(true);
-            usuario.setInicioSuspension(LocalDateTime.now());
-            usuario.setFinSuspension(request.getFinSuspension());
-            userService.guardarCambios(usuario);
-            return usuario;
+        return userService.suspenderUsuario(request);
     }
 
     @PostMapping("/banear/")
     public Usuario banearUsuario(@Valid @RequestBody BanUserRequest request){
-        Usuario usuario = userService.encontrarUsuario(request.getUser());
-        usuario.setBaneado(true);
-        userService.guardarCambios(usuario);
-        return usuario;
+        return userService.banearUsuario(request);
     }
 
     @PostMapping("/desbanear/")
     public Usuario desbanearUsuario(@Valid @RequestBody BanUserRequest request){
-        Usuario usuario = userService.encontrarUsuario(request.getUser());
-        usuario.setBaneado(false);
-        userService.guardarCambios(usuario);
-        return usuario;
+        return userService.desbanearUsuario(request);
     }
 }

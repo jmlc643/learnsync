@@ -1,10 +1,13 @@
 package com.learnsyc.appweb.services;
 
 import com.learnsyc.appweb.models.Hilo;
+import com.learnsyc.appweb.models.Topico;
+import com.learnsyc.appweb.models.Usuario;
 import com.learnsyc.appweb.repositories.HiloRepository;
-import com.learnsyc.appweb.serializers.categoria.CategoriaSerializer;
+import com.learnsyc.appweb.serializers.hilos.DeleteHiloRequest;
 import com.learnsyc.appweb.serializers.hilos.HiloSerializer;
-import com.learnsyc.appweb.serializers.topico.TopicoSerializer;
+import com.learnsyc.appweb.serializers.hilos.MoveHiloRequest;
+import com.learnsyc.appweb.serializers.hilos.SaveHiloRequest;
 import com.learnsyc.appweb.serializers.usuario.UserSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,12 +19,19 @@ public class HiloService {
     
     @Autowired
     HiloRepository hiloRepository;
+    @Autowired
+    UserService userService;
+    @Autowired
+    TopicoService topicoService;
 
     public List<Hilo> listarHilo(){
         return hiloRepository.findAll();
     }
 
-    public Hilo guardarHilo(Hilo hilo){
+    public Hilo guardarHilo(SaveHiloRequest request){
+        Usuario usuario = userService.encontrarUsuario(request.getUsername());
+        Topico topico = topicoService.encontrarTopico(request.getTopicname());
+        Hilo hilo = new Hilo(null, request.getTitulo(), request.getMensaje(), topico, usuario);
         return hiloRepository.save(hilo);
     }
 
@@ -29,14 +39,31 @@ public class HiloService {
         return hiloRepository.findByIdHilo(id);
     }
 
-    public void eliminarHilo(Long id){hiloRepository.deleteById(id);}
+    public Hilo eliminarHilo(DeleteHiloRequest request){
+        Hilo hilo = encontrarHilo(request.getId());
+        hiloRepository.deleteById(request.getId());
+        return hilo;
+    }
 
     public Hilo guardarCambios(Hilo hilo){return hiloRepository.saveAndFlush(hilo);}
 
     public HiloSerializer retornarHilo(Hilo hilo){
         return new HiloSerializer(hilo.getIdHilo(), hilo.getTitulo(), hilo.getMensaje(), hilo.isCerrado(), hilo.getFechaCreacion(),
-                new TopicoSerializer(hilo.getTopico().getNombre(), hilo.getTopico().getDescripcion(),
-                        new CategoriaSerializer(hilo.getTopico().getCategoria().getNombre(), hilo.getTopico().getCategoria().getDescripcion())),
-                new UserSerializer(hilo.getUsuario().getUser(), hilo.getUsuario().getEmail()));
+                topicoService.retornarTopico(hilo.getTopico()), new UserSerializer(hilo.getUsuario().getUser(), hilo.getUsuario().getEmail()));
+    }
+
+    public HiloSerializer cerrarHilo(DeleteHiloRequest request){
+        Hilo hilo = encontrarHilo(request.getId());
+        hilo.setCerrado(true);
+        guardarCambios(hilo);
+        return retornarHilo(hilo);
+    }
+
+    public HiloSerializer moverHilo(MoveHiloRequest request){
+        Hilo hilo = encontrarHilo(request.getId());
+        Topico topico = topicoService.encontrarTopico(request.getNombreTopico());
+        hilo.setTopico(topico);
+        guardarCambios(hilo);
+        return retornarHilo(hilo);
     }
 }
