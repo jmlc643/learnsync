@@ -29,7 +29,8 @@ public class UserController {
 
     @PostMapping("/")
     public Usuario crearUsuario(@Valid @RequestBody SaveUserRequest request) {
-        return userService.guardarUsuario(request);
+        Usuario usuario = new Usuario(null, request.getUser(), request.getPassword(), request.getEmail());
+        return userService.guardarUsuario(usuario);
 
     }
 

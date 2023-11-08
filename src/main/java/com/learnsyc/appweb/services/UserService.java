@@ -3,6 +3,7 @@ package com.learnsyc.appweb.services;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.learnsyc.appweb.excepciones.ResourceAlreadyExistsException;
 import com.learnsyc.appweb.serializers.usuario.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,9 +21,14 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public Usuario guardarUsuario(SaveUserRequest request) {
+    public Usuario guardarUsuario(Usuario usuario) {
         //enviar correo
-        Usuario usuario = new Usuario(null, request.getUser(), request.getPassword(), request.getEmail());
+        if(userRepository.existsUsuarioByUser(usuario.getUser())){
+            throw new ResourceAlreadyExistsException("El usuario "+usuario.getUser()+" existe");
+        }
+        if(userRepository.existsUsuarioByEmail(usuario.getEmail())){
+            throw new ResourceAlreadyExistsException("El email ya ha sido usado para la creación de otro usuario");
+        }
         return userRepository.save(usuario);
     }
 

@@ -4,8 +4,6 @@ import com.learnsyc.appweb.excepciones.ResourceAlreadyExistsException;
 import com.learnsyc.appweb.models.Categoria;
 import com.learnsyc.appweb.repositories.CategoriaRepository;
 import com.learnsyc.appweb.services.CategoriaService;
-import com.learnsyc.appweb.serializers.categoria.CategoriaSerializer;
-import com.learnsyc.appweb.serializers.categoria.DeleteCategoriaRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,10 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class CategoriaServiceTest {
@@ -87,6 +83,26 @@ public class CategoriaServiceTest {
             assertEquals(categoriaGuardada1.getNombre(), categoriaAGuardar2.getNombre());
             assertEquals(e.getMessage(), "La categoria "+categoriaAGuardar2.getNombre()+" existe");
         }
+    }
 
+    @Test
+    public void testEncontrarCategoria(){
+        //Give
+        Categoria categoriaMock = new Categoria(1L, "Nombre 1", "Descripcion 1");
+        when(categoriaRepository.findByNombre("Nombre 1")).thenReturn(categoriaMock);
+        //When
+        Categoria categoria = categoriaService.encontrarCategoria("Nombre 1");
+        //Then
+        assertNotNull(categoria);
+        assertEquals(1L, categoria.getIdCategorias());
+        assertEquals("Nombre 1", categoria.getNombre());
+        assertEquals("Descripcion 1", categoria.getDescripcion());
+    }
+
+    @Test
+    public void testEncontrarCategoria_CategoriaNoEncontrada(){
+        when(categoriaRepository.findByNombre("Nombre 1")).thenReturn(null);
+        Categoria categoria = categoriaService.encontrarCategoria("Nombre 1");
+        assertNull(categoria);
     }
 }

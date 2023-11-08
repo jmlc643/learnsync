@@ -8,15 +8,21 @@ import com.learnsyc.appweb.serializers.usuario.BanUserRequest; // Importación d
 import com.learnsyc.appweb.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 
     @Mock
@@ -31,19 +37,44 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testGuardarUsuario() {
+    public void testListarUsuario() {
         // Given
-        SaveUserRequest saveUserRequest = new SaveUserRequest("john.doe", "password123", "john.doe@example.com");
-        Usuario usuarioToSave = new Usuario(null, saveUserRequest.getUser(), saveUserRequest.getPassword(), saveUserRequest.getEmail());
-        Usuario usuarioSaved = new Usuario(1L, saveUserRequest.getUser(), saveUserRequest.getPassword(), saveUserRequest.getEmail());
-
-        when(userRepository.save(usuarioToSave)).thenReturn(usuarioSaved);
+        Usuario usuario1 = new Usuario(1L, "User1", "Password1", "Email1@gmail.com");
+        Usuario usuario2 = new Usuario(2L, "User2", "Password2", "Email2@gmail.com");
+        List<Usuario> usuarios = Arrays.asList(usuario1, usuario2);
+        when(userRepository.findAll()).thenReturn(usuarios);
 
         // When
-        Usuario result = userService.guardarUsuario(saveUserRequest);
+        List<Usuario> result = userService.listarUsuarios();
 
         // Then
-        assertUsuarioEquals(usuarioSaved, result);
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals("User1", result.get(0).getUser());
+        assertEquals("Password1", result.get(0).getPassword());
+        assertEquals("Email1@gmail.com", result.get(0).getEmail());
+        assertEquals("User2", result.get(1).getUser());
+        assertEquals("Password2", result.get(1).getPassword());
+        assertEquals("Email2@gmail.com", result.get(1).getEmail());
+    }
+
+    @Test
+    public void testGuardarUsuario(){
+        //Given
+        Usuario usuarioMock = new Usuario(1L, "User1", "Password1", "Email1@gmail.com");
+        when(userRepository.existsUsuarioByUser(usuarioMock.getUser())).thenReturn(false);
+        when(userRepository.existsUsuarioByEmail(usuarioMock.getEmail())).thenReturn(false);
+        when(userRepository.save(usuarioMock)).thenReturn(usuarioMock);
+        //When
+        Usuario usuarioAGuardar = new Usuario(1L, "User1", "Password1", "Email1@gmail.com");
+        Usuario usuarioGuardado;
+        usuarioGuardado = userService.guardarUsuario(usuarioAGuardar);
+        //Then
+        assertNotNull(usuarioGuardado);
+        assertEquals(1L, usuarioGuardado.getIdUsuario());
+        assertEquals("User1", usuarioGuardado.getUser());
+        assertEquals("Password1", usuarioGuardado.getPassword());
+        assertEquals("Email1@gmail.com", usuarioGuardado.getEmail());
     }
 
     @Test
