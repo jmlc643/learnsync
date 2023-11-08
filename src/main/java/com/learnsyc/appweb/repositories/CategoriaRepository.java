@@ -8,4 +8,6 @@ import com.learnsyc.appweb.models.Categoria;
 public interface CategoriaRepository extends JpaRepository<Categoria, Long>{
     Categoria findByNombre(String nombre);
     void deleteById(Long id);
+
+    boolean existsCategoriaByNombre(String nombre);
 }

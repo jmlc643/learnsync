@@ -13,7 +13,7 @@ import com.learnsyc.appweb.services.CategoriaService;
 
 @RestController
 @RequestMapping("categoria")
-//@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200")
 public class CategoriaController {
     
     @Autowired CategoriaService categoriaService; 
@@ -25,7 +25,8 @@ public class CategoriaController {
 
     @PostMapping("/")
     public Categoria crearCategoria(@Valid @RequestBody CategoriaSerializer request) {
-        return categoriaService.guardarCategoria(request);
+        Categoria categoria = new Categoria(null, request.getNombre(), request.getDescripcion());
+        return categoriaService.guardarCategoria(categoria);
     }
 
     @DeleteMapping("/")

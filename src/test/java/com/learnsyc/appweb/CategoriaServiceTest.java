@@ -1,5 +1,6 @@
 package com.learnsyc.appweb;
 
+import com.learnsyc.appweb.excepciones.ResourceAlreadyExistsException;
 import com.learnsyc.appweb.models.Categoria;
 import com.learnsyc.appweb.repositories.CategoriaRepository;
 import com.learnsyc.appweb.services.CategoriaService;
@@ -7,16 +8,20 @@ import com.learnsyc.appweb.serializers.categoria.CategoriaSerializer;
 import com.learnsyc.appweb.serializers.categoria.DeleteCategoriaRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
-
+@ExtendWith(MockitoExtension.class)
 public class CategoriaServiceTest {
 
     @Mock
@@ -43,10 +48,45 @@ public class CategoriaServiceTest {
         List<Categoria> result = categoriaService.listarCategorias();
 
         // Then
+        assertNotNull(result);
         assertEquals(2, result.size());
         assertEquals("Nombre 1", result.get(0).getNombre());
         assertEquals("Descripción 1", result.get(0).getDescripcion());
         assertEquals("Nombre 2", result.get(1).getNombre());
         assertEquals("Descripción 2", result.get(1).getDescripcion());
+    }
+
+    @Test
+    public void testGuardarCategoria() {
+        //Give
+        Categoria categoriaMock = new Categoria(1L, "Nombre 1", "Descripcion 1");
+        when(categoriaRepository.existsCategoriaByNombre(categoriaMock.getNombre())).thenReturn(false);
+        when(categoriaRepository.save(categoriaMock)).thenReturn(categoriaMock);
+        //When
+        Categoria categoriaAGuardar = new Categoria(1L, "Nombre 1", "Descripcion 1");
+        Categoria categoriaGuardada;
+        categoriaGuardada = categoriaService.guardarCategoria(categoriaAGuardar);
+        //Then
+        assertNotNull(categoriaGuardada);
+        assertEquals(1L, categoriaGuardada.getIdCategorias());
+        assertEquals("Nombre 1", categoriaGuardada.getNombre());
+        assertEquals("Descripcion 1", categoriaGuardada.getDescripcion());
+    }
+
+    @Test
+    public void testGuardarCategoria_CategoriaExistente(){
+        ResourceAlreadyExistsException e = null;
+        Categoria categoriaAGuardar1 = new Categoria(1L, "Nombre 1", "Descripcion 1");
+        Categoria categoriaGuardada1;
+        categoriaGuardada1 = categoriaService.guardarCategoria(categoriaAGuardar1);
+        Categoria categoriaAGuardar2 = new Categoria(2L, "Nombre 1", "Descripcion 2");
+        Categoria categoriaGuardada2;
+        try{
+            categoriaGuardada2 = categoriaService.guardarCategoria(categoriaAGuardar2);
+        }catch (ResourceAlreadyExistsException e2){
+            assertEquals(categoriaGuardada1.getNombre(), categoriaAGuardar2.getNombre());
+            assertEquals(e.getMessage(), "La categoria "+categoriaAGuardar2.getNombre()+" existe");
+        }
+
     }
 }

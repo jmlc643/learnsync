@@ -2,6 +2,7 @@ package com.learnsyc.appweb.services;
 
 import java.util.List;
 
+import com.learnsyc.appweb.excepciones.ResourceAlreadyExistsException;
 import com.learnsyc.appweb.serializers.categoria.CategoriaSerializer;
 import com.learnsyc.appweb.serializers.categoria.DeleteCategoriaRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,10 @@ public class CategoriaService {
         return categoriaRepository.findAll();
     }
 
-    public Categoria guardarCategoria(CategoriaSerializer request){
-        Categoria categoria = new Categoria(null, request.getNombre(), request.getDescripcion());
+    public Categoria guardarCategoria(Categoria categoria){
+        if(categoriaRepository.existsCategoriaByNombre(categoria.getNombre())){
+            throw new ResourceAlreadyExistsException("La categoría "+ categoria.getNombre()+" existe");
+        }
         return categoriaRepository.save(categoria);
     }
 
