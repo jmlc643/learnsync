@@ -2,6 +2,7 @@ package com.learnsyc.appweb.services;
 
 import java.util.List;
 
+import com.learnsyc.appweb.excepciones.ResourceAlreadyExistsException;
 import com.learnsyc.appweb.models.Categoria;
 import com.learnsyc.appweb.serializers.categoria.CategoriaSerializer;
 import com.learnsyc.appweb.serializers.topico.*;
@@ -16,16 +17,15 @@ public class TopicoService {
     
     @Autowired
     TopicoRepository topicoRepository;
-    @Autowired
-    CategoriaService categoriaService;
 
     public List<Topico> listarTopico(){
         return topicoRepository.findAll();
     }
 
-    public Topico guardarTopico(SaveTopicoRequest request){
-        Categoria categoria = categoriaService.encontrarCategoria(request.getNombreCategoria());
-        Topico topico = new Topico(null, request.getNombre(), request.getDescripcion(), categoria);
+    public Topico guardarTopico(Topico topico){
+        if(topicoRepository.existsTopicoByNombre(topico.getNombre())){
+            throw new ResourceAlreadyExistsException("El tópico "+topico.getNombre()+" existe");
+        }
         return topicoRepository.save(topico);
     }
 

@@ -11,4 +11,6 @@ public interface TopicoRepository extends JpaRepository<Topico, Long>{
     Topico saveAndFlush(Topico topico);
 
     void deleteById(Long Id);
+
+    boolean existsTopicoByNombre(String nombre);
 }

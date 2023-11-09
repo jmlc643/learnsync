@@ -77,6 +77,8 @@ public class UserServiceTest {
         assertEquals("Email1@gmail.com", usuarioGuardado.getEmail());
     }
 
+    //Avanzar desde aqui para abajo
+
     @Test
     public void testEncontrarUsuario() {
         // Given

@@ -2,7 +2,9 @@ package com.learnsyc.appweb.controllers;
 
 import java.util.List;
 
+import com.learnsyc.appweb.models.Categoria;
 import com.learnsyc.appweb.serializers.topico.*;
+import com.learnsyc.appweb.services.CategoriaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,7 @@ import com.learnsyc.appweb.services.TopicoService;
 //@CrossOrigin(origins = "http://localhost:4200")
 public class TopicoController {
     @Autowired TopicoService topicoService;
+    @Autowired CategoriaService categoriaService;
 
     @GetMapping("/")
     public List<TopicoSerializer> listarTopico() {
@@ -24,7 +27,9 @@ public class TopicoController {
 
     @PostMapping("/")
     public Topico crearTopico(@Valid @RequestBody SaveTopicoRequest request) {
-        return topicoService.guardarTopico(request);
+        Categoria categoria = categoriaService.encontrarCategoria(request.getNombreCategoria());
+        Topico topico = new Topico(null, request.getNombre(), request.getDescripcion(), categoria);
+        return topicoService.guardarTopico(topico);
     }
 
     @PutMapping("/")
