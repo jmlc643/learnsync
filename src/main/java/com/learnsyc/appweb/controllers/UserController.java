@@ -36,7 +36,8 @@ public class UserController {
 
     @PostMapping("/authentication/")
     public UserSerializer iniciarSesion(@Valid @RequestBody AuthenticationUserRequest request){
-        return userService.autenticarUsuario(request);
+        Usuario usuario = userService.autenticarUsuario(request);
+        return userService.retornarUsuario(usuario);
     }
 
     @PostMapping("/suspender/")

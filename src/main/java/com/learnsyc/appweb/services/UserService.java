@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.learnsyc.appweb.excepciones.ResourceAlreadyExistsException;
+import com.learnsyc.appweb.excepciones.ResourceNotExistsException;
 import com.learnsyc.appweb.serializers.usuario.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,17 +34,17 @@ public class UserService {
     }
 
     public Usuario encontrarUsuario(String user) {
+        if(!userRepository.existsUsuarioByUser(user)){
+            throw new ResourceNotExistsException("El usuario "+user+" no existe");
+        }
         return userRepository.findByUser(user);
     }
 
-    public UserSerializer autenticarUsuario(AuthenticationUserRequest request){
-        try{
-            Usuario usuario = userRepository.findByUserAndPassword(request.getUser(), request.getPassword());
-            return new UserSerializer(usuario.getUser(), usuario.getEmail());
-        }catch (Exception e){
-            System.out.println("Usuario no encontrado");
-            return new UserSerializer("","");
+    public Usuario autenticarUsuario(AuthenticationUserRequest request){
+        if(!userRepository.existsUsuarioByUserAndPassword(request.getUser(), request.getPassword())){
+            throw new ResourceNotExistsException("El usuario o contraseña son incorrectos");
         }
+        return userRepository.findByUserAndPassword(request.getUser(), request.getPassword());
     }
 
     public Usuario guardarCambios(Usuario usuario){return userRepository.saveAndFlush(usuario);}
@@ -66,5 +67,9 @@ public class UserService {
         Usuario usuario = encontrarUsuario(request.getUser());
         usuario.setBaneado(false);
         return guardarCambios(usuario);
+    }
+
+    public UserSerializer retornarUsuario(Usuario usuario){
+        return new UserSerializer(usuario.getUser(), usuario.getEmail());
     }
 }
