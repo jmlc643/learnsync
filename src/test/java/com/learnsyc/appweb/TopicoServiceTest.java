@@ -1,6 +1,7 @@
 package com.learnsyc.appweb;
 
 import com.learnsyc.appweb.excepciones.ResourceAlreadyExistsException;
+import com.learnsyc.appweb.excepciones.ResourceNotExistsException;
 import com.learnsyc.appweb.models.Categoria;
 import com.learnsyc.appweb.models.Topico;
 import com.learnsyc.appweb.repositories.TopicoRepository;
@@ -18,7 +19,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class TopicoServiceTest {
@@ -66,7 +67,7 @@ public class TopicoServiceTest {
         assertEquals("Descripcion1", result.get(1).getCategoria().getDescripcion());
     }
 
-    @Test //Cambiar fechaCreacion a tipo Date
+    @Test
     public void testGuardarTopico(){
         //Give
         Categoria categoriaMock = new Categoria(1L, "Categoria1", "Descripcion1");
@@ -90,7 +91,6 @@ public class TopicoServiceTest {
 
     @Test
     public void testGuardarTopico_TopicoExistente(){
-        ResourceAlreadyExistsException e = null;
         Categoria categoriaMock = new Categoria(1L, "Categoria1", "Descripcion1");
         Topico topico1 = new Topico(1L, "Tópico 1", "Descripción 1", categoriaMock);
         Topico topicoGuardado1;
@@ -99,15 +99,58 @@ public class TopicoServiceTest {
         Topico topicoGuardado2;
         try{
             topicoGuardado2 = topicoService.guardarTopico(topico2);
-        }catch (ResourceAlreadyExistsException e2){
-            assertEquals(topicoGuardado1, topico2);
+        }catch (ResourceAlreadyExistsException e){
+            assertEquals(topicoGuardado1.getNombre(), topico2.getNombre());
             assertEquals(e.getMessage(), "El tópico "+topico2.getNombre()+" existe");
         }
     }
 
     @Test
-    public void testBuscarTopico(){} //Fusionar buscarTopico con encontrarTopico
+    public void testBuscarTopico(){
+        //Give
+        Categoria categoriaMock = new Categoria(1L, "Categoria1", "Descripcion1");
+        Topico topico = new Topico(1L, "Tópico 1", "Descripción 1", categoriaMock);
+        when(topicoRepository.existsTopicoByNombre("Tópico 1")).thenReturn(true);
+        when(topicoRepository.findByNombre("Tópico 1")).thenReturn(topico);
+        //When
+        Topico topicoEncontrado = topicoService.buscarTopico("Tópico 1");
+        //Then
+        assertNotNull(topicoEncontrado);
+        assertEquals(1L, topicoEncontrado.getIdTopico());
+        assertEquals("Tópico 1", topicoEncontrado.getNombre());
+        assertEquals("Descripción 1", topicoEncontrado.getDescripcion());
+        assertNotNull(topicoEncontrado.getCategoria());
+        assertEquals(1L, topicoEncontrado.getCategoria().getIdCategorias());
+        assertEquals("Categoria1", topicoEncontrado.getCategoria().getNombre());
+        assertEquals("Descripcion1", topicoEncontrado.getCategoria().getDescripcion());
+    }
 
     @Test
-    public void testEditarCambios(){}
+    public void testBuscarTopico_TopicoNoExiste(){
+        Topico topico;
+        try{
+            topico = topicoService.buscarTopico("Nombre 1");
+        }catch (ResourceNotExistsException e2){
+            assertEquals("El tópico Nombre 1 no existe", e2.getMessage());
+        }
+    }
+
+    @Test
+    public void testEditarCambios(){
+        //Give
+        Categoria categoriaMock = new Categoria(1L, "Nombre1", "Descripcion1");
+        Topico topicoMock = new Topico(1L, "Nombre1", "Descripcion1", categoriaMock);
+        topicoMock.setNombre("Nombre 1");
+        topicoMock.setDescripcion("Descripcion 1");
+        topicoService.guardarCambios(topicoMock);
+        verify(topicoRepository, times(1)).saveAndFlush(topicoMock);
+    }
+
+    @Test
+    public void testEliminarTopico(){
+        Categoria categoriaMock = new Categoria(1L, "Nombre1", "Descripcion1");
+        Topico topicoMock = new Topico(1L, "Nombre1", "Descripcion1", categoriaMock);
+        topicoRepository.deleteById(1L);
+        verify(topicoRepository, times(1)).deleteById(1L);
+    }
 }

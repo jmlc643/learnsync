@@ -1,6 +1,7 @@
 package com.learnsyc.appweb;
 
 import com.learnsyc.appweb.excepciones.ResourceAlreadyExistsException;
+import com.learnsyc.appweb.excepciones.ResourceNotExistsException;
 import com.learnsyc.appweb.models.Categoria;
 import com.learnsyc.appweb.repositories.CategoriaRepository;
 import com.learnsyc.appweb.services.CategoriaService;
@@ -16,7 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+
 @ExtendWith(MockitoExtension.class)
 public class CategoriaServiceTest {
 
@@ -71,7 +73,6 @@ public class CategoriaServiceTest {
 
     @Test
     public void testGuardarCategoria_CategoriaExistente(){
-        ResourceAlreadyExistsException e = null;
         Categoria categoriaAGuardar1 = new Categoria(1L, "Nombre 1", "Descripcion 1");
         Categoria categoriaGuardada1;
         categoriaGuardada1 = categoriaService.guardarCategoria(categoriaAGuardar1);
@@ -81,7 +82,7 @@ public class CategoriaServiceTest {
             categoriaGuardada2 = categoriaService.guardarCategoria(categoriaAGuardar2);
         }catch (ResourceAlreadyExistsException e2){
             assertEquals(categoriaGuardada1.getNombre(), categoriaAGuardar2.getNombre());
-            assertEquals(e.getMessage(), "La categoria "+categoriaAGuardar2.getNombre()+" existe");
+            assertEquals("La categoria "+categoriaAGuardar2.getNombre()+" existe", e2.getMessage());
         }
     }
 
@@ -101,8 +102,18 @@ public class CategoriaServiceTest {
 
     @Test
     public void testEncontrarCategoria_CategoriaNoEncontrada(){
-        when(categoriaRepository.findByNombre("Nombre 1")).thenReturn(null);
-        Categoria categoria = categoriaService.encontrarCategoria("Nombre 1");
-        assertNull(categoria);
+        Categoria categoria;
+        try{
+            categoria = categoriaService.encontrarCategoria("Nombre 1");
+        }catch (ResourceNotExistsException e){
+            assertEquals("La categoria Nombre 1 no existe", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testEliminarCategoria(){
+        Categoria categoria = new Categoria(1L, "Nombre1", "Descripcion1");
+        categoriaRepository.deleteById(1L);
+        verify(categoriaRepository, times(1)).deleteById(1L);
     }
 }

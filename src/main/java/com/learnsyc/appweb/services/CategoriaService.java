@@ -3,6 +3,7 @@ package com.learnsyc.appweb.services;
 import java.util.List;
 
 import com.learnsyc.appweb.excepciones.ResourceAlreadyExistsException;
+import com.learnsyc.appweb.excepciones.ResourceNotExistsException;
 import com.learnsyc.appweb.serializers.categoria.CategoriaSerializer;
 import com.learnsyc.appweb.serializers.categoria.DeleteCategoriaRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,9 @@ public class CategoriaService {
     }
 
     public Categoria encontrarCategoria(String nombre){
-        return categoriaRepository.findByNombre(nombre);
+        if(!categoriaRepository.existsCategoriaByNombre(nombre)) {
+            throw new ResourceNotExistsException("La categoria "+nombre+" no existe");
+        }return categoriaRepository.findByNombre(nombre);
     }
 
     public Categoria eliminarCategoria(DeleteCategoriaRequest request){

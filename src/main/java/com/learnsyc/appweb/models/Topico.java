@@ -22,7 +22,7 @@ public class Topico {
     @Column(name="descripcion")
     String descripcion;
     @Column(name="fecha_creacion")
-    final LocalDateTime fechaCreacion = LocalDateTime.now();
+    final LocalDate fechaCreacion = LocalDate.now();
     //Cambiar a guion bajo los name
     @JoinColumns({
         @JoinColumn(name="id_categorias", referencedColumnName="id_categorias")

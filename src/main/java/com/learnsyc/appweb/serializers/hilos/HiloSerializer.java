@@ -4,6 +4,7 @@ import com.learnsyc.appweb.serializers.topico.TopicoSerializer;
 import com.learnsyc.appweb.serializers.usuario.UserSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import java.time.*;
 
 import java.time.LocalDateTime;
 
@@ -14,7 +15,7 @@ public class HiloSerializer {
     String titulo;
     String mensaje;
     boolean cerrado;
-    LocalDateTime fechaCreacion;
+    LocalDate fechaCreacion; //Cambiar a LocalDateTime
     TopicoSerializer topico;
     UserSerializer usuario;
 }

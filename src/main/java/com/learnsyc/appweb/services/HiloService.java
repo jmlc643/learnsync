@@ -1,5 +1,6 @@
 package com.learnsyc.appweb.services;
 
+import com.learnsyc.appweb.excepciones.ResourceAlreadyExistsException;
 import com.learnsyc.appweb.models.Hilo;
 import com.learnsyc.appweb.models.Topico;
 import com.learnsyc.appweb.models.Usuario;
@@ -20,18 +21,16 @@ public class HiloService {
     @Autowired
     HiloRepository hiloRepository;
     @Autowired
-    UserService userService;
-    @Autowired
     TopicoService topicoService;
 
     public List<Hilo> listarHilo(){
         return hiloRepository.findAll();
     }
 
-    public Hilo guardarHilo(SaveHiloRequest request){
-        Usuario usuario = userService.encontrarUsuario(request.getUsername());
-        Topico topico = topicoService.encontrarTopico(request.getTopicname());
-        Hilo hilo = new Hilo(null, request.getTitulo(), request.getMensaje(), topico, usuario);
+    public Hilo guardarHilo(Hilo hilo){
+        if(hiloRepository.existsHiloByIdHilo(hilo.getIdHilo())){
+            throw new ResourceAlreadyExistsException("El hilo "+hilo.getTitulo()+" ya existe");
+        }
         return hiloRepository.save(hilo);
     }
 
@@ -61,7 +60,7 @@ public class HiloService {
 
     public HiloSerializer moverHilo(MoveHiloRequest request){
         Hilo hilo = encontrarHilo(request.getId());
-        Topico topico = topicoService.encontrarTopico(request.getNombreTopico());
+        Topico topico = topicoService.buscarTopico(request.getNombreTopico());
         hilo.setTopico(topico);
         guardarCambios(hilo);
         return retornarHilo(hilo);

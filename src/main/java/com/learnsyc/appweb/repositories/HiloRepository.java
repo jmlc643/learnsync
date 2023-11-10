@@ -12,4 +12,6 @@ public interface HiloRepository extends JpaRepository<Hilo, Long>{
     void deleteById(Long id);
 
     Hilo saveAndFlush(Hilo hilo);
+
+    boolean existsHiloByIdHilo(Long id);
 }

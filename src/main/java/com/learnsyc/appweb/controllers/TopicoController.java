@@ -45,6 +45,8 @@ public class TopicoController {
     @GetMapping("/buscar/")
     public TopicoSerializer buscarTopico(@Valid @RequestBody BuscarTopicoRequest request){
         //Buscar por hilos y comentarios (IDEA)
-        return topicoService.buscarTopico(request);
+        Topico topico = topicoService.buscarTopico(request.getNombre());
+        TopicoSerializer topicoSerializer = topicoService.retornarTopico(topico);
+        return topicoSerializer;
     }
 }
