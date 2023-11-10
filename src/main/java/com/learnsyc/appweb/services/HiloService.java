@@ -1,6 +1,7 @@
 package com.learnsyc.appweb.services;
 
 import com.learnsyc.appweb.excepciones.ResourceAlreadyExistsException;
+import com.learnsyc.appweb.excepciones.ResourceNotExistsException;
 import com.learnsyc.appweb.models.Hilo;
 import com.learnsyc.appweb.models.Topico;
 import com.learnsyc.appweb.models.Usuario;
@@ -28,13 +29,13 @@ public class HiloService {
     }
 
     public Hilo guardarHilo(Hilo hilo){
-        if(hiloRepository.existsHiloByIdHilo(hilo.getIdHilo())){
-            throw new ResourceAlreadyExistsException("El hilo "+hilo.getTitulo()+" ya existe");
-        }
         return hiloRepository.save(hilo);
     }
 
     public Hilo encontrarHilo(Long id){
+        if(!hiloRepository.existsById(id)){
+            throw new ResourceNotExistsException("El hilo #"+id+" no existe");
+        }
         return hiloRepository.findByIdHilo(id);
     }
 

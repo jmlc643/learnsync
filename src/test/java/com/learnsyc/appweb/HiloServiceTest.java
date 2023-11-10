@@ -1,6 +1,6 @@
 package com.learnsyc.appweb;
 
-import com.learnsyc.appweb.excepciones.ResourceAlreadyExistsException;
+import com.learnsyc.appweb.excepciones.ResourceNotExistsException;
 import com.learnsyc.appweb.models.Categoria;
 import com.learnsyc.appweb.models.Hilo;
 import com.learnsyc.appweb.models.Topico;
@@ -20,7 +20,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class HiloServiceTest {
@@ -95,7 +95,6 @@ public class HiloServiceTest {
         Topico topicoMock = new Topico(1L, "Topico1", "Descripcion1", categoriaMock);
         Usuario usuarioMock = new Usuario(1l, "Usuario1", "Password1", "Email@gmail.com");
         Hilo hilo = new Hilo(1L, "Título 1", "Mensaje 1", topicoMock, usuarioMock);
-        when(hiloRepository.existsHiloByIdHilo(1L)).thenReturn(false);
         when(hiloRepository.save(hilo)).thenReturn(hilo);
         //When
         Categoria categoria = new Categoria(1L, "Categoria1", "Descripcion1");
@@ -125,23 +124,77 @@ public class HiloServiceTest {
     }
 
     @Test
-    public void testGuardarHilo_HiloExistente(){
-        Categoria categoria = new Categoria(1L, "Categoria1", "Descripcion1");
-        Topico topico = new Topico(1L, "Topico1", "Descripcion1", categoria);
-        Usuario usuario = new Usuario(1l, "Usuario1", "Password1", "Email@gmail.com");
-        Hilo hiloAGuardar1 = new Hilo(1L, "Título 1", "Mensaje 1", topico, usuario);
-        Hilo hiloGuardado1;
-        hiloGuardado1 = hiloService.guardarHilo(hiloAGuardar1);
-        Hilo hiloAGuardar2 = new Hilo(2L, "Título 1", "Mensaje 2", topico, usuario);
-        Hilo hiloGuardado2;
+    public void testEncontrarHilo(){
+        //Give
+        Categoria categoriaMock = new Categoria(1L, "Categoria1", "Descripcion1");
+        Topico topicoMock = new Topico(1L, "Topico1", "Descripcion1", categoriaMock);
+        Usuario usuarioMock = new Usuario(1l, "Usuario1", "Password1", "Email@gmail.com");
+        Hilo hilo = new Hilo(1L, "Título 1", "Mensaje 1", topicoMock, usuarioMock);
+        when(hiloRepository.existsById(1L)).thenReturn(true);
+        when(hiloRepository.findByIdHilo(1L)).thenReturn(hilo);
+        //When
+        Hilo hiloEncontrado = hiloService.encontrarHilo(1L);
+        //Then
+        assertNotNull(hiloEncontrado);
+        assertEquals(1L, hiloEncontrado.getIdHilo());
+        assertEquals("Título 1", hiloEncontrado.getTitulo());
+        assertEquals("Mensaje 1", hiloEncontrado.getMensaje());
+        assertNotNull(hiloEncontrado.getTopico());
+        assertEquals(1L, hiloEncontrado.getTopico().getIdTopico());
+        assertEquals("Topico1", hiloEncontrado.getTopico().getNombre());
+        assertEquals("Descripcion1", hiloEncontrado.getTopico().getDescripcion());
+        assertNotNull(hiloEncontrado.getTopico().getCategoria());
+        assertEquals(1L, hiloEncontrado.getTopico().getCategoria().getIdCategorias());
+        assertEquals("Categoria1", hiloEncontrado.getTopico().getCategoria().getNombre());
+        assertEquals("Descripcion1", hiloEncontrado.getTopico().getCategoria().getDescripcion());
+        assertNotNull(hiloEncontrado.getUsuario());
+        assertEquals(1L, hiloEncontrado.getUsuario().getIdUsuario());
+        assertEquals("Usuario1", hiloEncontrado.getUsuario().getUser());
+        assertEquals("Password1", hiloEncontrado.getUsuario().getPassword());
+        assertEquals("Email@gmail.com", hiloEncontrado.getUsuario().getEmail());
+    }
+
+    @Test
+    public void testEncontrarHilo_HiloNoEncontrado(){
+        Hilo hilo;
         try{
-            hiloGuardado2 = hiloService.guardarHilo(hiloAGuardar2);
-        }catch (ResourceAlreadyExistsException e){
-            assertEquals(hiloGuardado1, hiloAGuardar2);
-            assertEquals("El hilo "+hiloAGuardar2.getTitulo()+" ya existe", e.getMessage());
+            hilo = hiloService.encontrarHilo(1L);
+        }catch (ResourceNotExistsException e){
+            assertEquals("El hilo #1 no existe", e.getMessage());
         }
     }
 
-    //@Test
+    @Test
+    public void testEliminarHilo(){
+        Categoria categoriaMock = new Categoria(1L, "Categoria1", "Descripcion1");
+        Topico topicoMock = new Topico(1L, "Topico1", "Descripcion1", categoriaMock);
+        Usuario usuarioMock = new Usuario(1l, "Usuario1", "Password1", "Email@gmail.com");
+        Hilo hilo = new Hilo(1L, "Título 1", "Mensaje 1", topicoMock, usuarioMock);
+        hiloRepository.deleteById(1L);
+        verify(hiloRepository, times(1)).deleteById(1L);
+    }
+
+    @Test
+    public void testCerrarHilo(){
+        Categoria categoriaMock = new Categoria(1L, "Categoria1", "Descripcion1");
+        Topico topicoMock = new Topico(1L, "Topico1", "Descripcion1", categoriaMock);
+        Usuario usuarioMock = new Usuario(1l, "Usuario1", "Password1", "Email@gmail.com");
+        Hilo hilo = new Hilo(1L, "Título 1", "Mensaje 1", topicoMock, usuarioMock);
+        hilo.setCerrado(true);
+        hiloService.guardarCambios(hilo);
+        verify(hiloRepository, times(1)).saveAndFlush(hilo);
+    }
+
+    @Test
+    public void testMoverHilo(){
+        Categoria categoriaMock = new Categoria(1L, "Categoria1", "Descripcion1");
+        Topico topicoMock = new Topico(1L, "Topico1", "Descripcion1", categoriaMock);
+        Usuario usuarioMock = new Usuario(1l, "Usuario1", "Password1", "Email@gmail.com");
+        Hilo hilo = new Hilo(1L, "Título 1", "Mensaje 1", topicoMock, usuarioMock);
+        Topico topicoAcambiar = new Topico(2L, "Topico2", "Descripcion2", categoriaMock);
+        hilo.setTopico(topicoAcambiar);
+        hiloService.guardarCambios(hilo);
+        verify(hiloRepository, times(1)).saveAndFlush(hilo);
+    }
 
 }
