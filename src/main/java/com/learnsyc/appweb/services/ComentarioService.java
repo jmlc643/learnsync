@@ -1,5 +1,6 @@
 package com.learnsyc.appweb.services;
 
+import com.learnsyc.appweb.excepciones.ResourceNotExistsException;
 import com.learnsyc.appweb.models.Comentario;
 import com.learnsyc.appweb.models.Hilo;
 import com.learnsyc.appweb.models.Usuario;
@@ -20,20 +21,18 @@ public class ComentarioService {
     @Autowired
     ComentarioRepository comentarioRepository;
     @Autowired
-    UserService userService;
-    @Autowired
     HiloService hiloService;
 
     public List<Comentario> listarComentario(){return comentarioRepository.findAll();}
 
-    public Comentario guardarComentario(SaveComentarioRequest request){
-        Usuario usuario = userService.encontrarUsuario(request.getUsername());
-        Hilo hilo = hiloService.encontrarHilo(request.getIdHilo());
-        Comentario comentario = new Comentario(null, request.getMensaje(), hilo, usuario);
+    public Comentario guardarComentario(Comentario comentario){
         return comentarioRepository.save(comentario);
     }
 
     public Comentario encontrarComentario(Long id){
+        if(!comentarioRepository.existsById(id)){
+            throw new ResourceNotExistsException("El comentario #"+id+" no existe");
+        }
         return comentarioRepository.findByIdComentario(id);
     }
 
