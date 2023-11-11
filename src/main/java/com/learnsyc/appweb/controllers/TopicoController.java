@@ -3,6 +3,7 @@ package com.learnsyc.appweb.controllers;
 import java.util.List;
 
 import com.learnsyc.appweb.models.Categoria;
+import com.learnsyc.appweb.serializers.categoria.DeleteCategoriaRequest;
 import com.learnsyc.appweb.serializers.topico.*;
 import com.learnsyc.appweb.services.CategoriaService;
 import jakarta.validation.Valid;
@@ -10,12 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.learnsyc.appweb.models.Topico;
-import com.learnsyc.appweb.serializers.categoria.CategoriaSerializer;
 import com.learnsyc.appweb.services.TopicoService;
 
 @RestController
 @RequestMapping("topico")
-//@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200")
 public class TopicoController {
     @Autowired TopicoService topicoService;
     @Autowired CategoriaService categoriaService;
@@ -23,6 +23,13 @@ public class TopicoController {
     @GetMapping("/")
     public List<TopicoSerializer> listarTopico() {
         return topicoService.listarTopico().stream().map((it) -> topicoService.retornarTopico(it)).toList();
+    }
+
+
+    @GetMapping("/listar/")
+    public List<TopicoSerializer> listarTopicoPorCategoria(@Valid @RequestBody  DeleteCategoriaRequest request){ //Use el Delete solo por reutilizar la clase
+        Categoria categoria = categoriaService.encontrarCategoria(request.getNombre());
+        return topicoService.listarTopicoPorCategoria(categoria).stream().map((it) -> topicoService.retornarTopico(it)).toList();
     }
 
     @PostMapping("/")
@@ -46,7 +53,6 @@ public class TopicoController {
     public TopicoSerializer buscarTopico(@Valid @RequestBody BuscarTopicoRequest request){
         //Buscar por hilos y comentarios (IDEA)
         Topico topico = topicoService.buscarTopico(request.getNombre());
-        TopicoSerializer topicoSerializer = topicoService.retornarTopico(topico);
-        return topicoSerializer;
+        return topicoService.retornarTopico(topico);
     }
 }

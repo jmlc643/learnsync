@@ -12,7 +12,7 @@ import jakarta.validation.constraints.NotNull;
 public class SaveTopicoRequest {    
     @NotEmpty(message = "Dato vacio")
     @NotBlank(message = "No es valido un dato con solo espacio en blanco")
-    @Size(max = 20 , message = "Los topicos deben tener un maximo de 20 caracteres")
+    @Size(max = 50 , message = "Los topicos deben tener un maximo de 20 caracteres")
     String nombre;
     @NotEmpty(message = "Dato vacio")
     @NotBlank(message = "No es valido un dato con solo espacio en blanco")

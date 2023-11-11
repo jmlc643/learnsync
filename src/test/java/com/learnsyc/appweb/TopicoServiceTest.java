@@ -49,7 +49,7 @@ public class TopicoServiceTest {
         List<Topico> result = topicoService.listarTopico();
 
         // Then
-        assertNotNull(topicos);
+        assertNotNull(result);
         assertEquals(2, result.size());
         assertEquals(1L, result.get(0).getIdTopico());
         assertEquals("Tópico 1", result.get(0).getNombre());
@@ -152,5 +152,58 @@ public class TopicoServiceTest {
         Topico topicoMock = new Topico(1L, "Nombre1", "Descripcion1", categoriaMock);
         topicoRepository.deleteById(1L);
         verify(topicoRepository, times(1)).deleteById(1L);
+    }
+
+    @Test
+    public void testListarTopicoPorCategoria(){
+        //Give
+        Categoria categoriaMock1 = new Categoria(1L, "Nombre1", "Descripcion1");
+        Categoria categoriaMock2 = new Categoria(2L, "Nombre2", "Descripcion2");
+        Topico topicoMock1 = new Topico(1L, "Nombre1", "Descripcion1", categoriaMock2);
+        Topico topicoMock2 = new Topico(2L, "Nombre2", "Descripcion2", categoriaMock1);
+        Topico topicoMock3 = new Topico(3L, "Nombre3", "Descripcion3", categoriaMock2);
+        Topico topicoMock4 = new Topico(4L, "Nombre4", "Descripcion4", categoriaMock1);
+        List<Topico> topicosCategoria1 = Arrays.asList(topicoMock2, topicoMock4);
+        List<Topico> topicosCategoria2 = Arrays.asList(topicoMock1, topicoMock3);
+        when(topicoRepository.findAllByCategoria(categoriaMock1)).thenReturn(topicosCategoria1);
+        when(topicoRepository.findAllByCategoria(categoriaMock2)).thenReturn(topicosCategoria2);
+        //When
+        Categoria categoria1 = new Categoria(1L, "Nombre1", "Descripcion1");
+        Categoria categoria2 = new Categoria(2L, "Nombre2", "Descripcion2");
+        List<Topico> result1 = topicoService.listarTopicoPorCategoria(categoria1);
+        List<Topico> result2 = topicoService.listarTopicoPorCategoria(categoria2);
+        //Then
+        assertNotNull(result1);
+        assertEquals(2, result1.size());
+        assertEquals(2L, result1.get(0).getIdTopico());
+        assertEquals("Nombre2", result1.get(0).getNombre());
+        assertEquals("Descripcion2", result1.get(0).getDescripcion());
+        assertEquals(4L, result1.get(1).getIdTopico());
+        assertEquals("Nombre4", result1.get(1).getNombre());
+        assertEquals("Descripcion4", result1.get(1).getDescripcion());
+        assertNotNull(result1.get(0).getCategoria());
+        assertNotNull(result1.get(1).getCategoria());
+        assertEquals(1L, result1.get(0).getCategoria().getIdCategorias());
+        assertEquals("Nombre1", result1.get(0).getCategoria().getNombre());
+        assertEquals("Descripcion1", result1.get(0).getCategoria().getDescripcion());
+        assertEquals(1L, result1.get(1).getCategoria().getIdCategorias());
+        assertEquals("Nombre1", result1.get(1).getCategoria().getNombre());
+        assertEquals("Descripcion1", result1.get(1).getCategoria().getDescripcion());
+        assertNotNull(result2);
+        assertEquals(2, result2.size());
+        assertEquals(1L, result2.get(0).getIdTopico());
+        assertEquals("Nombre1", result2.get(0).getNombre());
+        assertEquals("Descripcion1", result2.get(0).getDescripcion());
+        assertEquals(3L, result2.get(1).getIdTopico());
+        assertEquals("Nombre3", result2.get(1).getNombre());
+        assertEquals("Descripcion3", result2.get(1).getDescripcion());
+        assertNotNull(result2.get(0).getCategoria());
+        assertNotNull(result2.get(1).getCategoria());
+        assertEquals(2L, result2.get(0).getCategoria().getIdCategorias());
+        assertEquals("Nombre2", result2.get(0).getCategoria().getNombre());
+        assertEquals("Descripcion2", result2.get(0).getCategoria().getDescripcion());
+        assertEquals(2L, result2.get(1).getCategoria().getIdCategorias());
+        assertEquals("Nombre2", result2.get(1).getCategoria().getNombre());
+        assertEquals("Descripcion2", result2.get(1).getCategoria().getDescripcion());
     }
 }

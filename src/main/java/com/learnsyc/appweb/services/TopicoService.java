@@ -6,6 +6,7 @@ import com.learnsyc.appweb.excepciones.ResourceAlreadyExistsException;
 import com.learnsyc.appweb.excepciones.ResourceNotExistsException;
 import com.learnsyc.appweb.models.Categoria;
 import com.learnsyc.appweb.serializers.categoria.CategoriaSerializer;
+import com.learnsyc.appweb.serializers.categoria.DeleteCategoriaRequest;
 import com.learnsyc.appweb.serializers.topico.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,9 +19,15 @@ public class TopicoService {
     
     @Autowired
     TopicoRepository topicoRepository;
+    @Autowired
+    CategoriaService categoriaService;
 
     public List<Topico> listarTopico(){
         return topicoRepository.findAll();
+    }
+
+    public List<Topico> listarTopicoPorCategoria(Categoria categoria){
+        return topicoRepository.findAllByCategoria(categoria);
     }
 
     public Topico guardarTopico(Topico topico){
