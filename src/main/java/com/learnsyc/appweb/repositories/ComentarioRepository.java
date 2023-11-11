@@ -7,4 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ComentarioRepository extends JpaRepository<Comentario, Long> {
     Comentario findByIdComentario(Long id);
+    Comentario saveAndFlush(Comentario comentario);
+
+    void deleteById(Long id);
 }

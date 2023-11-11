@@ -18,7 +18,7 @@ public class Comentario {
     @Column(name="mensaje")
     String mensaje;
     @Column(name="fecha_creacion")
-    final LocalDateTime fechaCreacion = LocalDateTime.now();
+    final LocalDate fechaCreacion = LocalDate.now(); //Cambiar a LocalDateTime
     @Column(name="es_editado")
     boolean esEditado;
     @JoinColumns({

@@ -5,6 +5,6 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class SaveUserResponse {
-    String message;
+public class AuthenticationUserResponse {
+    String mensaje;
 }

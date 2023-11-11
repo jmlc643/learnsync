@@ -2,6 +2,8 @@ package com.learnsyc.appweb.controllers;
 
 import java.util.List;
 
+import com.learnsyc.appweb.serializers.usuario.*;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,9 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.learnsyc.appweb.models.Usuario;
-import com.learnsyc.appweb.serializers.usuario.SaveUserRequest;
-import com.learnsyc.appweb.serializers.usuario.SaveUserResponse;
-import com.learnsyc.appweb.serializers.usuario.UserSerializer;
 import com.learnsyc.appweb.services.UserService;
 
 @RestController
@@ -29,9 +28,30 @@ public class UserController {
     }
 
     @PostMapping("/")
-    public SaveUserResponse crearUsuario(@RequestBody SaveUserRequest request) {
+    public Usuario crearUsuario(@Valid @RequestBody SaveUserRequest request) {
         Usuario usuario = new Usuario(null, request.getUser(), request.getPassword(), request.getEmail());
-        userService.guardarUsuario(usuario);
-        return new SaveUserResponse("Guardado!");
+        return userService.guardarUsuario(usuario);
+
+    }
+
+    @PostMapping("/authentication/")
+    public AuthenticationUserResponse iniciarSesion(@Valid @RequestBody AuthenticationUserRequest request){
+        Usuario usuario = userService.autenticarUsuario(request);
+        return new AuthenticationUserResponse("Logeado!");
+    }
+
+    @PostMapping("/suspender/")
+    public Usuario suspenderUsuario(@Valid @RequestBody SuspendedUserRequest request){
+        return userService.suspenderUsuario(request);
+    }
+
+    @PostMapping("/banear/")
+    public Usuario banearUsuario(@Valid @RequestBody BanUserRequest request){
+        return userService.banearUsuario(request);
+    }
+
+    @PostMapping("/desbanear/")
+    public Usuario desbanearUsuario(@Valid @RequestBody BanUserRequest request){
+        return userService.desbanearUsuario(request);
     }
 }

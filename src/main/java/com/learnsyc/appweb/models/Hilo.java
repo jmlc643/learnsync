@@ -21,7 +21,7 @@ public class Hilo {
     @Column(name="cerrado")
     boolean cerrado;
     @Column(name="fecha_creacion")
-    final LocalDateTime fechaCreacion = LocalDateTime.now();
+    final LocalDate fechaCreacion = LocalDate.now(); //Cambiar a LocalDateTime
     @JoinColumns({
             @JoinColumn(name="id_topico", referencedColumnName="id_topico")
     })

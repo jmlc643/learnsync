@@ -1,23 +1,19 @@
-package com.learnsyc.appweb.serializers.archivo;
+package com.learnsyc.appweb.serializers.usuario;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
-public class SaveArchivoRequest {
+public class SuspendedUserRequest {
     @NotEmpty(message = "Dato vacio")
     @NotBlank(message = "No es valido un dato con solo espacio en blanco")
-    String nombre;
+    String user;
     @NotEmpty(message = "Dato vacio")
     @NotBlank(message = "No es valido un dato con solo espacio en blanco")
-    String tipo;
-    @NotEmpty(message = "Dato vacio")
-    @NotBlank(message = "No es valido un dato con solo espacio en blanco")
-    String link;
-    @NotNull(message = "Dato vacio")
-    Long id;
+    LocalDateTime finSuspension;
 }
