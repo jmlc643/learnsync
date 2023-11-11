@@ -1,5 +1,6 @@
 package com.learnsyc.appweb.controllers;
 
+import com.learnsyc.appweb.excepciones.ClosedThreadException;
 import com.learnsyc.appweb.models.Comentario;
 import com.learnsyc.appweb.models.Hilo;
 import com.learnsyc.appweb.models.Usuario;

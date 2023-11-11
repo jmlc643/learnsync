@@ -1,8 +1,10 @@
 package com.learnsyc.appweb;
 
+import com.learnsyc.appweb.excepciones.ClosedThreadException;
 import com.learnsyc.appweb.excepciones.ResourceNotExistsException;
 import com.learnsyc.appweb.models.*;
 import com.learnsyc.appweb.repositories.ComentarioRepository;
+import com.learnsyc.appweb.serializers.comentario.SaveComentarioRequest;
 import com.learnsyc.appweb.services.ComentarioService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -140,6 +142,22 @@ public class ComentarioServiceTest {
         assertEquals("Usuario1", comentarioGuardado.getUsuario().getUser());
         assertEquals("Password1", comentarioGuardado.getUsuario().getPassword());
         assertEquals("Email@gmail.com", comentarioGuardado.getUsuario().getEmail());
+    }
+
+    @Test
+    public void testGuardarComentario_HiloCerrado(){
+        Categoria categoriaMock = new Categoria(1L, "Categoria1", "Descripcion1");
+        Topico topicoMock = new Topico(1L, "Topico1", "Descripcion1", categoriaMock);
+        Usuario usuarioMock = new Usuario(1l, "Usuario1", "Password1", "Email@gmail.com");
+        Hilo hiloMock = new Hilo(1L, "Título 1", "Mensaje 1", topicoMock, usuarioMock);
+        Comentario comentarioMock = new Comentario(1L, "Mensaje 1", hiloMock, usuarioMock);
+        comentarioMock.setEsEditado(true);
+        Comentario comentarioACrear;
+        try{
+            comentarioACrear = comentarioService.guardarComentario(comentarioMock);
+        }catch (ClosedThreadException e){
+            assertEquals("No se admiten comentarios en el hilo #1", e.getMessage());
+        }
     }
 
     @Test

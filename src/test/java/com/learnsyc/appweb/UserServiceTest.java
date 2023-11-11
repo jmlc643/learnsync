@@ -1,5 +1,6 @@
 package com.learnsyc.appweb;
 
+import com.learnsyc.appweb.excepciones.BannedUserException;
 import com.learnsyc.appweb.excepciones.ResourceAlreadyExistsException;
 import com.learnsyc.appweb.excepciones.ResourceNotExistsException;
 import com.learnsyc.appweb.models.Usuario;
@@ -156,6 +157,23 @@ public class UserServiceTest {
             assertEquals("El usuario o contraseña son incorrectos", e.getMessage());
         }
     }
+
+
+    @Test
+    public void testAutenticarUsuario_UsuarioBaneado(){
+        Usuario usuario = new Usuario(1L, "User1", "Password1", "Email@gmail.com");
+        usuario.setBaneado(true);
+        when(userRepository.existsUsuarioByUserAndPassword("User1", "Password1")).thenReturn(true);
+        when(userRepository.findByUserAndPassword("User1", "Password1")).thenReturn(usuario);
+        Usuario usuarioAEncontrar;
+        AuthenticationUserRequest authenticationUserRequest = new AuthenticationUserRequest("User1", "Password1");
+        try{
+            usuarioAEncontrar = userService.autenticarUsuario(authenticationUserRequest);
+        }catch (BannedUserException e){
+            assertEquals("El usuario User1 se encuentra baneado o suspendido", e.getMessage());
+        }
+    }
+
 
     @Test
     public void testSuspenderUsuario() {

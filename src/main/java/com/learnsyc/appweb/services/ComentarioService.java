@@ -1,5 +1,6 @@
 package com.learnsyc.appweb.services;
 
+import com.learnsyc.appweb.excepciones.ClosedThreadException;
 import com.learnsyc.appweb.excepciones.ResourceNotExistsException;
 import com.learnsyc.appweb.models.Comentario;
 import com.learnsyc.appweb.models.Hilo;
@@ -26,6 +27,9 @@ public class ComentarioService {
     public List<Comentario> listarComentario(){return comentarioRepository.findAll();}
 
     public Comentario guardarComentario(Comentario comentario){
+        if(comentario.getHilo().isCerrado()){
+            throw new ClosedThreadException("No se admiten comentarios en el hilo #"+comentario.getHilo().getIdHilo());
+        }
         return comentarioRepository.save(comentario);
     }
 
