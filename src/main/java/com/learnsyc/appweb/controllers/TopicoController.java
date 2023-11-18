@@ -26,9 +26,9 @@ public class TopicoController {
     }
 
 
-    @GetMapping("/listar/")
-    public List<TopicoSerializer> listarTopicoPorCategoria(@Valid @RequestBody  DeleteCategoriaRequest request){ //Use el Delete solo por reutilizar la clase
-        Categoria categoria = categoriaService.encontrarCategoria(request.getNombre());
+    @PostMapping("/listar/")
+    public List<TopicoSerializer> listarTopicoPorCategoria(@Valid @RequestBody  Topico request){ //Use el Delete solo por reutilizar la clase
+        Categoria categoria = categoriaService.encontrarCategoria(request.getCategoria().getNombre());
         return topicoService.listarTopicoPorCategoria(categoria).stream().map((it) -> topicoService.retornarTopico(it)).toList();
     }
 
@@ -49,10 +49,16 @@ public class TopicoController {
         return topicoService.eliminarTopico(request);
     }
 
-    @GetMapping("/buscar/")
+    @PostMapping("/buscar/")
     public TopicoSerializer buscarTopico(@Valid @RequestBody BuscarTopicoRequest request){
         //Buscar por hilos y comentarios (IDEA)
         Topico topico = topicoService.buscarTopico(request.getNombre());
+        return topicoService.retornarTopico(topico);
+    }
+
+    @PostMapping("/encontrar/")
+    public TopicoSerializer encontrarTopico(@Valid @RequestBody Long request){
+        Topico topico = topicoService.encontrarTopico(request);
         return topicoService.retornarTopico(topico);
     }
 }

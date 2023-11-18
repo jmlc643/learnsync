@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TopicoSerializer {
+    Long id;
     String nombre;
     String descripcion;
     CategoriaSerializer categoria;

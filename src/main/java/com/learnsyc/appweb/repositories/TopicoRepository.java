@@ -17,4 +17,6 @@ public interface TopicoRepository extends JpaRepository<Topico, Long>{
     boolean existsTopicoByNombre(String nombre);
 
     List<Topico> findAllByCategoria(Categoria categoria);
+
+    Topico findByIdTopico(Long request);
 }

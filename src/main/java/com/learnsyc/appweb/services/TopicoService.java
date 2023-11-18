@@ -63,7 +63,11 @@ public class TopicoService {
     }
 
     public TopicoSerializer retornarTopico(Topico topico){
-        return new TopicoSerializer(topico.getNombre(), topico.getDescripcion(),
+        return new TopicoSerializer(topico.getIdTopico(), topico.getNombre(), topico.getDescripcion(),
                 new CategoriaSerializer(topico.getCategoria().getNombre(), topico.getCategoria().getDescripcion()));
+    }
+
+    public Topico encontrarTopico(Long request) {
+        return topicoRepository.findByIdTopico(request);
     }
 }

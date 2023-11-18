@@ -130,7 +130,7 @@ public class UserServiceTest {
             user = userService.encontrarUsuario("john.doe");
         }catch (ResourceNotExistsException e){
             assertEquals("El usuario john.doe no existe", e.getMessage());
-        }
+        } //assertCatch
     }
 
     @Test
