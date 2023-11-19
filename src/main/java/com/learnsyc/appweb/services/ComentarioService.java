@@ -14,6 +14,7 @@ import com.learnsyc.appweb.serializers.usuario.UserSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -57,7 +58,7 @@ public class ComentarioService {
     }
 
     public ComentarioSerializer retornarComentario(Comentario comentario){
-        return new ComentarioSerializer(comentario.getIdComentario(), comentario.getMensaje(), comentario.isEsEditado(), hiloService.retornarHilo(comentario.getHilo()),
+        return new ComentarioSerializer(comentario.getIdComentario(), comentario.getMensaje(), comentario.isEsEditado(), comentario.getFechaCreacion(), hiloService.retornarHilo(comentario.getHilo()),
                 new UserSerializer(comentario.getUsuario().getUser(), comentario.getUsuario().getEmail()));
     }
 }

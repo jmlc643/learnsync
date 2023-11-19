@@ -23,7 +23,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("comentario")
-//@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200")
 public class ComentarioController {
     @Autowired ComentarioService comentarioService;
     @Autowired UserService userService;

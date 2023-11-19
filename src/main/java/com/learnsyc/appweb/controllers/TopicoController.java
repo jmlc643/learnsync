@@ -27,7 +27,7 @@ public class TopicoController {
 
 
     @PostMapping("/listar/")
-    public List<TopicoSerializer> listarTopicoPorCategoria(@Valid @RequestBody  Topico request){ //Use el Delete solo por reutilizar la clase
+    public List<TopicoSerializer> listarTopicoPorCategoria(@Valid @RequestBody  Topico request){
         Categoria categoria = categoriaService.encontrarCategoria(request.getCategoria().getNombre());
         return topicoService.listarTopicoPorCategoria(categoria).stream().map((it) -> topicoService.retornarTopico(it)).toList();
     }
