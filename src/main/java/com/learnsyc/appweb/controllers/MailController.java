@@ -1,6 +1,5 @@
 package com.learnsyc.appweb.controllers;
 
-import com.learnsyc.appweb.models.Email;
 import com.learnsyc.appweb.services.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
