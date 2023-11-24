@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class DeleteCategoriaRequest {
+public class  DeleteCategoriaRequest {
     @NotEmpty(message = "Dato vacio")
     @NotBlank(message = "No es valido un dato con solo espacio en blanco")
     String nombre;

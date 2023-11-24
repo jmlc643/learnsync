@@ -4,7 +4,7 @@ import java.time.*; //Para las fechas
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import jakarta.persistence.*; 
+import jakarta.persistence.*;
 @Data //Construye métodos Set, Get, toString
 @Table(name="usuarios") //Da a entender que sera un modelo de base de datos
 @Entity //Da a entender que sera una entidad de base de datos
@@ -32,6 +32,8 @@ public class Usuario {
     boolean baneado;
     @Column(name="nro_reportes")
     int nroReportes;
+    @Column(name="nro_puntos")
+    int nroPuntos;
 
     public Usuario(Long idUsuario, String user, String password, String email){
         this.idUsuario = idUsuario;
@@ -43,5 +45,6 @@ public class Usuario {
         finSuspension = null;
         baneado = false;
         nroReportes = 0;
+        nroPuntos = 0;
     }
 }
