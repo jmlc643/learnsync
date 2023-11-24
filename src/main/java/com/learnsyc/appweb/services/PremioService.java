@@ -1,7 +1,7 @@
 package com.learnsyc.appweb.services;
 
 import com.learnsyc.appweb.models.Premio;
-import com.learnsyc.appweb.repositories.PremioRepository;  // Asegúrate de tener el repositorio correspondiente
+import com.learnsyc.appweb.repositories.PremioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

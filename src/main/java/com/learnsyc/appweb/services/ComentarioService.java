@@ -59,6 +59,6 @@ public class ComentarioService {
 
     public ComentarioSerializer retornarComentario(Comentario comentario){
         return new ComentarioSerializer(comentario.getIdComentario(), comentario.getMensaje(), comentario.isEsEditado(), comentario.getFechaCreacion(), hiloService.retornarHilo(comentario.getHilo()),
-                new UserSerializer(comentario.getUsuario().getUser(), comentario.getUsuario().getEmail()));
+                new UserSerializer(comentario.getUsuario().getUser(), comentario.getUsuario().getEmail(), comentario.getUsuario().getNroPuntos()));
     }
 }

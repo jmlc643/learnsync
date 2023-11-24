@@ -1,5 +1,6 @@
 package com.learnsyc.appweb.controllers;
 
+import com.learnsyc.appweb.serializers.email.EmailDTO;
 import com.learnsyc.appweb.services.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,14 +13,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/v1")
+@RequestMapping("email")
 public class MailController {
 
     @Autowired
     private EmailService emailService;
 
-    @PostMapping("/sendMessage")
-    public ResponseEntity<?> receiveRequestEmail(@RequestBody Email email){
+    @PostMapping("/sendMessage/")
+    public ResponseEntity<?> receiveRequestEmail(@RequestBody EmailDTO email){
 
         System.out.println("Mensaje Recibido" + email);
 

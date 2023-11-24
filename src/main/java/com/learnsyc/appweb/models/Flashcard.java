@@ -23,10 +23,13 @@ public class Flashcard {
     String descripcion;
 
     @Column(name = "num_cards")
-    String numCards;
+    int numCards;
 
-    @Column(name = "id_propietario")
-    String idPropietario;
+    @JoinColumns({
+            @JoinColumn(name="id_usuario", referencedColumnName="id_usuario")
+    })
+    @ManyToOne
+    Usuario usuario;
 
     @Lob
     @Column(name = "archivo")

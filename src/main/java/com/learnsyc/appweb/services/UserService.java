@@ -74,6 +74,6 @@ public class UserService {
     }
 
     public UserSerializer retornarUsuario(Usuario usuario){
-        return new UserSerializer(usuario.getUser(), usuario.getEmail());
+        return new UserSerializer(usuario.getUser(), usuario.getEmail(), usuario.getNroPuntos());
     }
 }

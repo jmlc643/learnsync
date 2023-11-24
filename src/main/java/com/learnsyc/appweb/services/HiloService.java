@@ -49,7 +49,7 @@ public class HiloService {
 
     public HiloSerializer retornarHilo(Hilo hilo){
         return new HiloSerializer(hilo.getIdHilo(), hilo.getTitulo(), hilo.getMensaje(), hilo.isCerrado(), hilo.getFechaCreacion(),
-                topicoService.retornarTopico(hilo.getTopico()), new UserSerializer(hilo.getUsuario().getUser(), hilo.getUsuario().getEmail()));
+                topicoService.retornarTopico(hilo.getTopico()), new UserSerializer(hilo.getUsuario().getUser(), hilo.getUsuario().getEmail(), hilo.getUsuario().getNroPuntos()));
     }
 
     public HiloSerializer cerrarHilo(DeleteHiloRequest request){

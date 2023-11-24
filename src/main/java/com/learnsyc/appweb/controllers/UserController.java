@@ -24,7 +24,7 @@ public class UserController {
 
     @GetMapping("/")
     public List<UserSerializer> listarUsuario() {
-        return userService.listarUsuarios().stream().map((it) -> new UserSerializer(it.getUser(), it.getEmail())).toList();
+        return userService.listarUsuarios().stream().map((it) -> new UserSerializer(it.getUser(), it.getEmail(), it.getNroPuntos())).toList();
     }
 
     @PostMapping("/")

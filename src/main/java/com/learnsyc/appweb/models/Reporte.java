@@ -9,34 +9,45 @@ import lombok.NoArgsConstructor;
 @Table(name = "reportes")
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
 public class Reporte {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_reporte")
     Long idReporte;
 
-    @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    Usuario usuario;
-
-    @Column(name = "usuarioreportado")
-    String usuarioReportado;
-
-    @Column(name = "comentarioreportado")
-    String comentarioReportado;
-
-    @Column(name = "hiloreportado")
-    String hiloReportado;
-
-    @Column(name = "razon", columnDefinition = "TEXT")
+    @Column(name = "razon")
     String razon;
 
+    @JoinColumns({
+            @JoinColumn(name="id_usuario_reportado", referencedColumnName="id_usuario")
+    })
     @ManyToOne
-    @JoinColumn(name = "comentario_id")
+    Usuario usuarioReportado;
+
+    @JoinColumns({
+            @JoinColumn(name="id_usuario_reportador", referencedColumnName="id_usuario")
+    })
+    @ManyToOne
+    Usuario usuarioReportador;
+
+    @JoinColumns({
+            @JoinColumn(name="id_comentario", referencedColumnName="id_comentario")
+    })
+    @ManyToOne
     Comentario comentario;
 
+    @JoinColumns({
+            @JoinColumn(name="id_hilo", referencedColumnName="id_hilo")
+    })
     @ManyToOne
-    @JoinColumn(name = "hilo_id")
     Hilo hilo;
+
+    public Reporte(Long idReporte, String razon, Usuario usuarioReportado, Usuario usuarioReportador){
+        this.idReporte = idReporte;
+        this.razon = razon;
+        this.usuarioReportado = usuarioReportado;
+        this.usuarioReportador = usuarioReportador;
+        comentario = null;
+        hilo = null;
+    }
 }
