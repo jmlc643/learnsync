@@ -1,15 +1,19 @@
 package com.learnsyc.appweb.models;
 
 import java.time.*; //Para las fechas
+import java.util.Collection;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 @Data //Construye métodos Set, Get, toString
 @Table(name="usuarios") //Da a entender que sera un modelo de base de datos
 @Entity //Da a entender que sera una entidad de base de datos
 @NoArgsConstructor //Genera constructor vacio
-public class Usuario {
+public class Usuario implements UserDetails {
     @Id //Identifica a la primary key
     @GeneratedValue(strategy= GenerationType.AUTO) //Hace un autoincrement
     @Column(name="id_usuario") //Para que ubique a que columna agregar el valor
@@ -46,5 +50,35 @@ public class Usuario {
         baneado = false;
         nroReportes = 0;
         nroPuntos = 0;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return null;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

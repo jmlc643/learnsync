@@ -3,6 +3,7 @@ package com.learnsyc.appweb.controllers;
 import java.util.List;
 
 import com.learnsyc.appweb.serializers.usuario.*;
+import com.learnsyc.appweb.util.JwtTokenUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,7 +21,8 @@ import com.learnsyc.appweb.services.UserService;
 @CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 
-    @Autowired UserService userService; 
+    @Autowired UserService userService;
+    @Autowired JwtTokenUtil jwtTokenUtil;
 
     @GetMapping("/")
     public List<UserSerializer> listarUsuario() {
@@ -35,9 +37,8 @@ public class UserController {
     }
 
     @PostMapping("/authentication/")
-    public AuthenticationUserResponse iniciarSesion(@Valid @RequestBody AuthenticationUserRequest request){
-        Usuario usuario = userService.autenticarUsuario(request);
-        return new AuthenticationUserResponse("Logeado!");
+    public AuthenticationUserResponse iniciarSesion(@Valid @RequestBody AuthenticationUserRequest request) throws Exception {
+        return userService.autenticarUsuario(request);
     }
 
     @PostMapping("/suspender/")

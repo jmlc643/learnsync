@@ -2,22 +2,34 @@ package com.learnsyc.appweb.services;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import com.learnsyc.appweb.excepciones.BannedUserException;
 import com.learnsyc.appweb.excepciones.ResourceAlreadyExistsException;
 import com.learnsyc.appweb.excepciones.ResourceNotExistsException;
 import com.learnsyc.appweb.serializers.usuario.*;
+import com.learnsyc.appweb.util.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 import com.learnsyc.appweb.models.Usuario;
 import com.learnsyc.appweb.repositories.UserRepository;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class UserService {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired JwtTokenUtil jwtTokenUtil;
+    @Autowired
+    AuthenticationManager authenticationManager;
+
 
     public List<Usuario> listarUsuarios() {
         return userRepository.findAll();
@@ -41,14 +53,15 @@ public class UserService {
         return userRepository.findByUser(user);
     }
 
-    public Usuario autenticarUsuario(AuthenticationUserRequest request){
-        if(!userRepository.existsUsuarioByUserAndPassword(request.getUser(), request.getPassword())){
-            throw new ResourceNotExistsException("El usuario o contraseña son incorrectos");
+    public AuthenticationUserResponse autenticarUsuario(AuthenticationUserRequest request) throws Exception {
+        Optional<Usuario> usuario = userRepository.findByUserAndPassword(request.getUser(), request.getPassword());
+        if(usuario.isPresent()){
+            try{
+                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUser(), request.getPassword()));
+                return new AuthenticationUserResponse(jwtTokenUtil.generateToken(usuario.get()));
+            }catch (Exception e){}
         }
-        Usuario usuario = userRepository.findByUserAndPassword(request.getUser(), request.getPassword());
-        if(usuario.isBaneado()){
-            throw new BannedUserException("El usuario "+usuario.getUser()+" se encuentra baneado o suspendido");
-        }return usuario;
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Usuario y/o password incorrectos");
     }
 
     public Usuario guardarCambios(Usuario usuario){return userRepository.saveAndFlush(usuario);}

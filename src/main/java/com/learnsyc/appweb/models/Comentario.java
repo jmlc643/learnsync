@@ -21,6 +21,8 @@ public class Comentario {
     final LocalDate fechaCreacion = LocalDate.now(); //Cambiar a LocalDateTime
     @Column(name="es_editado")
     boolean esEditado;
+    @Column(name="link")
+    String link;
     @JoinColumns({
             @JoinColumn(name="id_hilo", referencedColumnName="id_hilo")
     })
@@ -37,6 +39,7 @@ public class Comentario {
         this.idComentario = idComentario;
         this.mensaje = mensaje;
         esEditado = false;
+        link = null;
         this.hilo = hilo;
         this.usuario = usuario;
     }

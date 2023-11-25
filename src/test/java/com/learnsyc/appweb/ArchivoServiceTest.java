@@ -1,11 +1,7 @@
 package com.learnsyc.appweb;
 
 import com.learnsyc.appweb.models.*;
-import com.learnsyc.appweb.repositories.ArchivoRepository;
-import com.learnsyc.appweb.services.ArchivoService;
 import com.learnsyc.appweb.services.ComentarioService;
-import com.learnsyc.appweb.serializers.archivo.ArchivoSerializer;
-import com.learnsyc.appweb.serializers.archivo.SaveArchivoRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
