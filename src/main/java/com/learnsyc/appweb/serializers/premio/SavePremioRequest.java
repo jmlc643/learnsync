@@ -22,4 +22,7 @@ public class SavePremioRequest {
 
     @NotEmpty(message = "Dato vacio")
     byte[] imagen;
+
+    @NotEmpty(message = "Dato vacio")
+    String username;
 }

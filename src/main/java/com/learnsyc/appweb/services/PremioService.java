@@ -16,26 +16,28 @@ import java.util.List;
 public class PremioService {
     @Autowired
     private PremioRepository premioRepository;
+    @Autowired
+    private UserService userService;
 
     public List<Premio> listarPremios() {
         return premioRepository.findAll();
     }
 
-    public Premio guardarPremio(SavePremioRequest request) {
-        Premio premio = new Premio();
-        BeanUtils.copyProperties(request, premio);
-        return premioRepository.save(premio);
+    private Premio guardarCambios(Premio premio) {
+        return premioRepository.saveAndFlush(premio);
     }
 
-    public Premio editarPremio(EditPremioRequest request) {
+    public PremioSerializer editarPremio(EditPremioRequest request) {
         Premio premio = encontrarPremio(request.getId());
-        BeanUtils.copyProperties(request, premio);
-        return premioRepository.save(premio);
+        premio.setNombre(request.getNombre());
+        premio.setDescripcion(request.getDescripcion());
+        premio.setPrecio(request.getPrecio());
+        premio.setImagen(request.getImage());
+        guardarCambios(premio);
+        return retornarPremio(premio);
     }
 
-    public Premio crearPremio(SavePremioRequest request) {
-        Premio premio = new Premio();
-        BeanUtils.copyProperties(request, premio);
+    public Premio crearPremio(Premio premio) {
         return premioRepository.save(premio);
     }
 
@@ -45,12 +47,11 @@ public class PremioService {
         return premio;
     }
 
-    public PremioSerializer retornarPremio(Long idPremio) {
-        Premio premio = encontrarPremio(idPremio);
+    public PremioSerializer retornarPremio(Premio premio) {
         return new PremioSerializer(premio.getNombre(), premio.getDescripcion(), premio.getPrecio(), premio.getImagen());
     }
 
-    private Premio encontrarPremio(Long idPremio) {
-        return premioRepository.findByIdPremio(idPremio);
+    private Premio encontrarPremio(Long id) {
+        return premioRepository.findByIdPremio(id);
     }
 }

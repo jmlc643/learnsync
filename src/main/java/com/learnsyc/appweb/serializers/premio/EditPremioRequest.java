@@ -20,4 +20,7 @@ public class EditPremioRequest {
     @NotEmpty(message = "Dato vacio")
     @NotBlank(message = "No es valido un dato con solo espacio en blanco")
     int precio;
+    @NotEmpty(message = "Dato vacio")
+    @NotBlank(message = "No es valido un dato con solo espacio en blanco")
+    byte[] image;
 }
