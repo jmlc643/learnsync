@@ -1,5 +1,6 @@
 package com.learnsyc.appweb.services;
 
+import com.learnsyc.appweb.excepciones.ResourceNotExistsException;
 import com.learnsyc.appweb.models.Premio;
 import com.learnsyc.appweb.repositories.PremioRepository;
 import com.learnsyc.appweb.serializers.premio.DeletePremioRequest;
@@ -11,9 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PremioService {
+
     @Autowired
     private PremioRepository premioRepository;
 
@@ -51,6 +55,7 @@ public class PremioService {
     }
 
     private Premio encontrarPremio(Long idPremio) {
-        return premioRepository.findByIdPremio(idPremio);
+        return premioRepository.findById(idPremio).orElseThrow(() ->
+                new ResourceNotExistsException("El premio con ID " + idPremio + " no existe."));
     }
 }
