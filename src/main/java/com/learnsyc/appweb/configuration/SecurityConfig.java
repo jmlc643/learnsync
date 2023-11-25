@@ -38,9 +38,9 @@ public class SecurityConfig {
         httpSecurity.csrf((csrf) -> csrf.disable())
                 // don't authenticate this particular request
                 // all other requests need to be authenticated
-                //.authorizeHttpRequests((it) -> it.requestMatchers("/api/auth/login").permitAll().anyRequest().authenticated())
+                .authorizeHttpRequests((it) -> it.requestMatchers("/api/auth/login").permitAll().anyRequest().authenticated())
                 // make sure we use stateless session; session won't be used to
-                .exceptionHandling((it) -> it.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+                //.exceptionHandling((it) -> it.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 // store user's state.
                 .sessionManagement((it) -> it.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
