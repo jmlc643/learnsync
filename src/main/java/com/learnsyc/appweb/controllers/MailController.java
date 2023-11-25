@@ -13,13 +13,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("email")
+@RequestMapping("/v1")
 public class MailController {
 
     @Autowired
     private EmailService emailService;
 
-    @PostMapping("/sendMessage/")
+    @PostMapping("/sendMessage")
     public ResponseEntity<?> receiveRequestEmail(@RequestBody EmailDTO email){
 
         System.out.println("Mensaje Recibido" + email);

@@ -2,6 +2,11 @@ package com.learnsyc.appweb.services;
 
 import com.learnsyc.appweb.models.Premio;
 import com.learnsyc.appweb.repositories.PremioRepository;
+import com.learnsyc.appweb.serializers.premio.DeletePremioRequest;
+import com.learnsyc.appweb.serializers.premio.EditPremioRequest;
+import com.learnsyc.appweb.serializers.premio.PremioSerializer;
+import com.learnsyc.appweb.serializers.premio.SavePremioRequest;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,35 +15,42 @@ import java.util.List;
 @Service
 public class PremioService {
     @Autowired
-    PremioRepository premioRepository;
+    private PremioRepository premioRepository;
 
-    // Método para listar todos los premios
     public List<Premio> listarPremios() {
         return premioRepository.findAll();
     }
 
-    // Método para guardar un nuevo premio
-    public Premio guardarPremio(Premio premio) {
+    public Premio guardarPremio(SavePremioRequest request) {
+        Premio premio = new Premio();
+        BeanUtils.copyProperties(request, premio);
         return premioRepository.save(premio);
     }
 
-    // Método para editar un premio existente
-    public Premio editarPremio(Premio premio) {
+    public Premio editarPremio(EditPremioRequest request) {
+        Premio premio = encontrarPremio(request.getId());
+        BeanUtils.copyProperties(request, premio);
         return premioRepository.save(premio);
     }
 
-    // Método para eliminar un premio
-    public void eliminarPremio(Long idPremio) {
-        premioRepository.deleteById(idPremio);
+    public Premio crearPremio(SavePremioRequest request) {
+        Premio premio = new Premio();
+        BeanUtils.copyProperties(request, premio);
+        return premioRepository.save(premio);
     }
 
-    // Método para retornar un premio específico
-    public Premio retornarPremio(Long idPremio) {
-        return premioRepository.findById(idPremio).orElse(null);
+    public Premio eliminarPremio(DeletePremioRequest request) {
+        Premio premio = encontrarPremio(request.getId());
+        premioRepository.deleteById(request.getId());
+        return premio;
     }
 
-    // Método para comprar un premio (puedes ajustar según tu lógica específica)
-    public void comprarPremio(Long idPremio) {
-        // Implementa la lógica de compra aquí
+    public PremioSerializer retornarPremio(Long idPremio) {
+        Premio premio = encontrarPremio(idPremio);
+        return new PremioSerializer(premio.getNombre(), premio.getDescripcion(), premio.getPrecio(), premio.getImagen());
+    }
+
+    private Premio encontrarPremio(Long idPremio) {
+        return premioRepository.findByIdPremio(idPremio);
     }
 }

@@ -51,10 +51,9 @@ public class HiloController {
     public HiloSerializer moverHilo(@Valid @RequestBody MoveHiloRequest request){
         return hiloService.moverHilo(request);
     }
-
     @PostMapping("/encontrar/")
-    public HiloSerializer encontrarHilo(@Valid @RequestBody Long request){
-        Hilo hilo = hiloService.encontrarHilo(request);
+    public HiloSerializer encontrarHilo(@Valid @RequestBody Long id) {
+        Hilo hilo = hiloService.encontrarHilo(id);
         return hiloService.retornarHilo(hilo);
     }
 }

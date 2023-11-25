@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PremioRepository extends JpaRepository<Premio, Long> {
+    Premio saveAndFlush(Premio premio);
+    Premio findByIdPremio(Long id);
 }

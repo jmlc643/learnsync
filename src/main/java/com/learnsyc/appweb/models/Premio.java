@@ -28,4 +28,10 @@ public class Premio {
     @Lob
     @Column(name = "imagen")
     byte[] imagen;
+
+    @JoinColumns({
+            @JoinColumn(name="id_usuario", referencedColumnName="id_usuario")
+    })
+    @ManyToOne
+    Usuario usuario;
 }
