@@ -30,6 +30,7 @@ public class UserService {
     AuthenticationManager authenticationManager;
     @Autowired
     ConfirmationTokenRepository confirmationTokenRepository;
+    @Autowired EmailService emailService;
 
 
     public List<Usuario> listarUsuarios() {
@@ -42,9 +43,11 @@ public class UserService {
         }
         if(userRepository.existsUsuarioByEmail(usuario.getEmail())){
             throw new ResourceAlreadyExistsException("El email ya ha sido usado para la creación de otro usuario");
-        }
+        }/*
         String token = generarToken(usuario);
         enviarEmail(token);
+        */
+        usuario.setEnable(true);
         return userRepository.save(usuario);
     }
 
@@ -75,18 +78,33 @@ public class UserService {
         guardarCambios(usuario);
     }
 
+    public String recuperarContraseña(RecuperarContraRequest request){
+        Usuario usuario = encontrarUsuarioPorEmail(request.getEmail());
+        String mensaje = "Hola "+usuario.getUser()+"\nTú has solicitado la recuperación de tu contraseña y Learnsync se encarga de ayudar a sus usuarios en problemas como este." +
+                "\nSu contraseña es "+usuario.getPassword()+", ahora podrá autenticarse en Learnsync para hacer uso de sus funcionalidades.";
+        emailService.sendEmail(request.getEmail(), "Recuperar contraseña", mensaje);
+        return "Correo enviado, revise su bandeja de entrada";
+    }
+
     public String generarToken(Usuario usuario){
         String token = UUID.randomUUID().toString();
-        ConfirmationToken confirmationToken = new ConfirmationToken(token, usuario);
+        ConfirmationToken confirmationToken = new ConfirmationToken(null, token, usuario);
         confirmationTokenRepository.save(confirmationToken);
         return token;
     }
 
-    public Usuario encontrarUsuario(String user) {
+    public Usuario encontrarUsuarioPorUser(String user) {
         if(!userRepository.existsUsuarioByUser(user)){
             throw new ResourceNotExistsException("El usuario "+user+" no existe");
         }
         return userRepository.findByUser(user);
+    }
+
+    public Usuario encontrarUsuarioPorEmail(String email){
+        if(!userRepository.existsUsuarioByEmail(email)){
+            throw new ResourceNotExistsException(("Usuario no encontrado"));
+        }
+        return userRepository.findByEmail(email);
     }
 
     public AuthenticationUserResponse autenticarUsuario(AuthenticationUserRequest request) throws Exception {
@@ -103,7 +121,7 @@ public class UserService {
     public Usuario guardarCambios(Usuario usuario){return userRepository.saveAndFlush(usuario);}
 
     public Usuario suspenderUsuario(SuspendedUserRequest request){
-        Usuario usuario = encontrarUsuario(request.getUser());
+        Usuario usuario = encontrarUsuarioPorUser(request.getUser());
         usuario.setBaneado(true);
         usuario.setInicioSuspension(LocalDateTime.now());
         usuario.setFinSuspension(request.getFinSuspension());
@@ -111,13 +129,13 @@ public class UserService {
     }
 
     public Usuario banearUsuario(BanUserRequest request){
-        Usuario usuario = encontrarUsuario(request.getUser());
+        Usuario usuario = encontrarUsuarioPorUser(request.getUser());
         usuario.setBaneado(true);
         return guardarCambios(usuario);
     }
 
     public Usuario desbanearUsuario(BanUserRequest request){
-        Usuario usuario = encontrarUsuario(request.getUser());
+        Usuario usuario = encontrarUsuarioPorUser(request.getUser());
         usuario.setBaneado(false);
         return guardarCambios(usuario);
     }

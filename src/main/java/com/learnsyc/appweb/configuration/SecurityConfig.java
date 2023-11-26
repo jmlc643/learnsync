@@ -71,8 +71,9 @@ public class SecurityConfig {
 
     private RequestMatcher publicEndPoints(){
         return new OrRequestMatcher(
-                new AntPathRequestMatcher("/user/register"),
-                new AntPathRequestMatcher("/user/authentication/")
+                new AntPathRequestMatcher("/user/register/"),
+                new AntPathRequestMatcher("/user/authentication/"),
+                new AntPathRequestMatcher("/user/recuperar-contra/")
         );
     }
 }

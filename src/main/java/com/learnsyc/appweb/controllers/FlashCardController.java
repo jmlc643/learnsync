@@ -30,7 +30,7 @@ public class FlashCardController {
 
     @PostMapping("/")
     public Flashcard subirFlashCard(@Valid @RequestBody SaveFlashCardRequest request){
-        Usuario usuario = userService.encontrarUsuario(request.getUsername());
+        Usuario usuario = userService.encontrarUsuarioPorUser(request.getUsername());
         Flashcard flashcard = new Flashcard(null, request.getNombre(), request.getDescripcion(), request.getNumCards(), usuario, request.getArchivo());
         return flashcardService.guardarFlashcard(flashcard);
     }

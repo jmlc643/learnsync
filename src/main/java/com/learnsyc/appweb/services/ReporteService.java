@@ -25,8 +25,8 @@ public class ReporteService {
     @Autowired HiloService hiloService;
 
     public Reporte generarReporte(SaveReporteRequest request) {
-        Usuario usuarioReportado = userService.encontrarUsuario(request.getUsernameReportado());
-        Usuario usuarioReportador = userService.encontrarUsuario(request.getUsernameReportador());
+        Usuario usuarioReportado = userService.encontrarUsuarioPorUser(request.getUsernameReportado());
+        Usuario usuarioReportador = userService.encontrarUsuarioPorUser(request.getUsernameReportador());
         Reporte reporte = new Reporte(null, request.getRazon(), usuarioReportado, usuarioReportador);
         if(Objects.equals(request.getEvidencia(), "Comentario")){
             Comentario comentario = comentarioService.encontrarComentario(request.getId());

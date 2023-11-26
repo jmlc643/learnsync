@@ -1,11 +1,9 @@
 package com.learnsyc.appweb;
 
-import com.learnsyc.appweb.excepciones.BannedUserException;
 import com.learnsyc.appweb.excepciones.ResourceAlreadyExistsException;
 import com.learnsyc.appweb.excepciones.ResourceNotExistsException;
 import com.learnsyc.appweb.models.Usuario;
 import com.learnsyc.appweb.repositories.UserRepository;
-import com.learnsyc.appweb.serializers.usuario.AuthenticationUserRequest;
 import com.learnsyc.appweb.serializers.usuario.SaveUserRequest;
 import com.learnsyc.appweb.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -116,7 +114,7 @@ public class UserServiceTest {
         when(userRepository.findByUser("john.doe")).thenReturn(userToFind);
 
         // When
-        Usuario result = userService.encontrarUsuario("john.doe");
+        Usuario result = userService.encontrarUsuarioPorUser("john.doe");
 
         // Then
         assertNotNull(result);
@@ -127,7 +125,7 @@ public class UserServiceTest {
     public void testEncontrarUsuario_UsuarioNoExiste(){
         Usuario user;
         try{
-            user = userService.encontrarUsuario("john.doe");
+            user = userService.encontrarUsuarioPorUser("john.doe");
         }catch (ResourceNotExistsException e){
             assertEquals("El usuario john.doe no existe", e.getMessage());
         } //assertCatch

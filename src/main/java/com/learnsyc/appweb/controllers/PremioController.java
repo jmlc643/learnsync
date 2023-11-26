@@ -30,7 +30,7 @@ public class PremioController {
 
     @PostMapping("/")
     public Premio subirPremio(@Valid @RequestBody SavePremioRequest request){
-        Usuario usuario = userService.encontrarUsuario(request.getUsername());
+        Usuario usuario = userService.encontrarUsuarioPorUser(request.getUsername());
         Premio premio = new Premio(null, request.getNombre(), request.getDescripcion(), request.getPrecio(), request.getImagen(), usuario);
         return premioService.crearPremio(premio);
     }

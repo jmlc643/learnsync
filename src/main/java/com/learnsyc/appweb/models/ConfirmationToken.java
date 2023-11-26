@@ -12,8 +12,11 @@ import java.time.LocalDateTime;
 @Entity
 public class ConfirmationToken {
     @Id //Identifica a la primary key
+    @GeneratedValue(strategy= GenerationType.AUTO)
     @Column(name="id_token") //Para que ubique a que columna agregar el valor
-    private String idToken;
+    private Long idToken;
+    @Column(name="token")
+    private String token;
     @Column(name="fecha_expiracion")
     private final LocalDateTime fechaExpiracion = LocalDateTime.now().plusMinutes(1);
     @Column(name="fecha_activacion")
@@ -26,8 +29,9 @@ public class ConfirmationToken {
     @ManyToOne
     Usuario usuario;
 
-    public ConfirmationToken(String idToken, Usuario usuario){
+    public ConfirmationToken(Long idToken, String token, Usuario usuario){
         this.idToken = idToken;
+        this.token = token;
         this.usuario = usuario;
     }
 }

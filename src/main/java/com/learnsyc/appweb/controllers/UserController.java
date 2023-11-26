@@ -27,11 +27,15 @@ public class UserController {
         return userService.listarUsuarios().stream().map((it) -> new UserSerializer(it.getUser(), it.getEmail(), it.getNroPuntos())).toList();
     }
 
-    @PostMapping("/register")
+    @PostMapping("/register/")
     public Usuario crearUsuario(@Valid @RequestBody SaveUserRequest request) {
         Usuario usuario = new Usuario(null, request.getUser(), request.getPassword(), request.getEmail());
         return userService.guardarUsuario(usuario);
+    }
 
+    @PostMapping("/recuperar-contra/")
+    public String recuperarContraseña(@Valid @RequestBody RecuperarContraRequest request){
+        return userService.recuperarContraseña(request);
     }
 
     @PostMapping("/authentication/")
