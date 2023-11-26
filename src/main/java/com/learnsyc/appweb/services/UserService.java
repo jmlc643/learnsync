@@ -3,17 +3,16 @@ package com.learnsyc.appweb.services;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
-import com.learnsyc.appweb.excepciones.BannedUserException;
-import com.learnsyc.appweb.excepciones.ResourceAlreadyExistsException;
-import com.learnsyc.appweb.excepciones.ResourceNotExistsException;
+import com.learnsyc.appweb.excepciones.*;
+import com.learnsyc.appweb.models.ConfirmationToken;
+import com.learnsyc.appweb.repositories.ConfirmationTokenRepository;
 import com.learnsyc.appweb.serializers.usuario.*;
 import com.learnsyc.appweb.util.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +28,8 @@ public class UserService {
     @Autowired JwtTokenUtil jwtTokenUtil;
     @Autowired
     AuthenticationManager authenticationManager;
+    @Autowired
+    ConfirmationTokenRepository confirmationTokenRepository;
 
 
     public List<Usuario> listarUsuarios() {
@@ -36,14 +37,49 @@ public class UserService {
     }
 
     public Usuario guardarUsuario(Usuario usuario) {
-        //enviar correo
         if(userRepository.existsUsuarioByUser(usuario.getUser())){
             throw new ResourceAlreadyExistsException("El usuario "+usuario.getUser()+" existe");
         }
         if(userRepository.existsUsuarioByEmail(usuario.getEmail())){
             throw new ResourceAlreadyExistsException("El email ya ha sido usado para la creación de otro usuario");
         }
+        String token = generarToken(usuario);
+        enviarEmail(token);
         return userRepository.save(usuario);
+    }
+
+    private void enviarEmail(String token) {
+        String url = "localhost:8080/user/confirmation-token?"+token;
+
+    }
+
+    public ConfirmationToken encontrarToken(String token){
+        if(!confirmationTokenRepository.existsConfirmationTokenByToken(token)){
+            throw new ResourceNotExistsException("Token no válido");
+        }
+        return confirmationTokenRepository.findByToken(token);
+    }
+
+    public void ConfirmarCuenta(String token){
+        ConfirmationToken confirmationToken = encontrarToken(token);
+        if(confirmationToken.getFechaActivacion() != null){
+            throw new EmailConfirmedException("Este email ya ha sido confirmado");
+        }
+        LocalDateTime fechaExpiracion = confirmationToken.getFechaExpiracion();
+        if(fechaExpiracion.isBefore(LocalDateTime.now())){
+            throw new ExpiredToken("Token expirado");
+        }
+        confirmationToken.setFechaActivacion(LocalDateTime.now());
+        Usuario usuario = confirmationToken.getUsuario();
+        usuario.setEnable(true);
+        guardarCambios(usuario);
+    }
+
+    public String generarToken(Usuario usuario){
+        String token = UUID.randomUUID().toString();
+        ConfirmationToken confirmationToken = new ConfirmationToken(token, usuario);
+        confirmationTokenRepository.save(confirmationToken);
+        return token;
     }
 
     public Usuario encontrarUsuario(String user) {

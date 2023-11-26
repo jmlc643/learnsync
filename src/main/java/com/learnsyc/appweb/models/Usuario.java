@@ -39,6 +39,12 @@ public class Usuario implements UserDetails {
     @Column(name="nro_puntos")
     int nroPuntos;
 
+    @Column(name="enable")
+    boolean enable;
+
+    @Column(name="fecha_expiracion")
+    LocalDateTime fechaExpiracion;
+
     public Usuario(Long idUsuario, String user, String password, String email){
         this.idUsuario = idUsuario;
         this.user = user;
@@ -50,6 +56,8 @@ public class Usuario implements UserDetails {
         baneado = false;
         nroReportes = 0;
         nroPuntos = 0;
+        enable = false;
+        fechaExpiracion = null;
     }
 
     @Override

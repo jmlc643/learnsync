@@ -3,7 +3,6 @@ package com.learnsyc.appweb.controllers;
 import java.util.List;
 
 import com.learnsyc.appweb.serializers.usuario.*;
-import com.learnsyc.appweb.util.JwtTokenUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -22,14 +21,13 @@ import com.learnsyc.appweb.services.UserService;
 public class UserController {
 
     @Autowired UserService userService;
-    @Autowired JwtTokenUtil jwtTokenUtil;
 
     @GetMapping("/")
     public List<UserSerializer> listarUsuario() {
         return userService.listarUsuarios().stream().map((it) -> new UserSerializer(it.getUser(), it.getEmail(), it.getNroPuntos())).toList();
     }
 
-    @PostMapping("/")
+    @PostMapping("/register")
     public Usuario crearUsuario(@Valid @RequestBody SaveUserRequest request) {
         Usuario usuario = new Usuario(null, request.getUser(), request.getPassword(), request.getEmail());
         return userService.guardarUsuario(usuario);

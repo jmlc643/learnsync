@@ -1,5 +1,6 @@
 package com.learnsyc.appweb.repositories;
 
+import com.learnsyc.appweb.models.ConfirmationToken;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.JpaRepository; 
 import com.learnsyc.appweb.models.Usuario;
@@ -13,5 +14,5 @@ public interface UserRepository extends JpaRepository<Usuario, Long> {
     Usuario saveAndFlush(Usuario usuario);
     boolean existsUsuarioByUser(String user);
     boolean existsUsuarioByEmail(String email);
-    boolean existsUsuarioByUserAndPassword(String user, String password);
+
 }
