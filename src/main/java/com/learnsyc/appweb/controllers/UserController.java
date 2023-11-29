@@ -22,7 +22,7 @@ public class UserController {
 
     @Autowired UserService userService;
 
-    @GetMapping("/")
+    @GetMapping("/listar/")
     public List<UserSerializer> listarUsuario() {
         return userService.listarUsuarios().stream().map((it) -> new UserSerializer(it.getUser(), it.getEmail(), it.getNroPuntos())).toList();
     }

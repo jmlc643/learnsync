@@ -1,5 +1,6 @@
 package com.learnsyc.appweb.util;
 
+import com.learnsyc.appweb.models.Usuario;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -25,11 +26,11 @@ public class JwtTokenUtil implements Serializable {
     public String secret;
 
     //generate token for required data i.e. user details
-    public String generateToken(UserDetails userDetails){
+    public String generateToken(Usuario usuario){
         // we can set extra info this claims hashmap and below defined getCustomParamFromToken to get it by passing Map key.
         Map<String, Object> claims = new HashMap<>();
 //        claims.put("sub-application", "inventory");
-        return doGenerateToken(claims, userDetails.getUsername());
+        return doGenerateToken(claims, usuario.getUser());
     }
 
     //while creating the token -
@@ -45,7 +46,9 @@ public class JwtTokenUtil implements Serializable {
 
     public Boolean validateToken(String token, UserDetails userDetails){
         final String userName = getUserNameFromToken(token);
-        return (!isTokenExpired(token) && userName.equals(userDetails.getUsername()));
+        boolean condition1 = !isTokenExpired(token);
+        boolean condition2 = userName.equals(userDetails.getUsername());
+        return (condition1 && condition2);
     }
 
     public String getUserNameFromToken(String token) {

@@ -9,11 +9,13 @@ import com.learnsyc.appweb.excepciones.*;
 import com.learnsyc.appweb.models.ConfirmationToken;
 import com.learnsyc.appweb.repositories.ConfirmationTokenRepository;
 import com.learnsyc.appweb.serializers.usuario.*;
+import com.learnsyc.appweb.util.EncryptionUtil;
 import com.learnsyc.appweb.util.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
 import com.learnsyc.appweb.models.Usuario;
@@ -108,12 +110,14 @@ public class UserService {
     }
 
     public AuthenticationUserResponse autenticarUsuario(AuthenticationUserRequest request) throws Exception {
-        Optional<Usuario> usuario = userRepository.findByUserAndPassword(request.getUser(), request.getPassword());
+        Optional<Usuario> usuario = Optional.ofNullable(userRepository.findByUser(request.getUser()));
         if(usuario.isPresent()){
             try{
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUser(), request.getPassword()));
-                return new AuthenticationUserResponse(jwtTokenUtil.generateToken(usuario.get()));
-            }catch (Exception e){}
+                return new AuthenticationUserResponse(EncryptionUtil.encrypt(jwtTokenUtil.generateToken(usuario.get())));
+            }catch (AuthenticationException e){
+                //pass to the throw.
+            }
         }
         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Usuario y/o password incorrectos");
     }
