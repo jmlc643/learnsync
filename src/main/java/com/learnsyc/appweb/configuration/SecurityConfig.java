@@ -10,8 +10,8 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -19,7 +19,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
-import org.springframework.security.web.util.matcher.RequestMatchers;
 
 @Configuration
 @EnableWebSecurity
@@ -39,13 +38,12 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
         logger.debug("SecurityConfig initialized.");
         // We don't need CSRF for this example
-        httpSecurity.csrf((csrf) -> csrf.disable())
+        httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 // don't authenticate this particular request
                 // all other requests need to be authenticated
                 .authorizeHttpRequests((it) -> it.requestMatchers(publicEndPoints()).permitAll().anyRequest().authenticated())
                 // make sure we use stateless session; session won't be used to
                 //.exceptionHandling((it) -> it.authenticationEntryPoint(jwtAuthenticationEntryPoint))
-                //Endpoint publicos
                 // store user's state.
                 .sessionManagement((it) -> it.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 

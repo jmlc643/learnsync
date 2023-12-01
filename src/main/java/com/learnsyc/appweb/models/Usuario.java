@@ -2,15 +2,18 @@ package com.learnsyc.appweb.models;
 
 import java.time.*; //Para las fechas
 import java.util.Collection;
+import java.util.List;
 
+import com.learnsyc.appweb.serializers.usuario.Role;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Data //Construye métodos Set, Get, toString
-@Table(name="usuarios") //Da a entender que sera un modelo de base de datos
+@Table(name="usuarios", uniqueConstraints = {@UniqueConstraint(columnNames = {"user", "email"})}) //Da a entender que sera un modelo de base de datos
 @Entity //Da a entender que sera una entidad de base de datos
 @NoArgsConstructor //Genera constructor vacio
 public class Usuario implements UserDetails {
@@ -18,15 +21,15 @@ public class Usuario implements UserDetails {
     @GeneratedValue(strategy= GenerationType.AUTO) //Hace un autoincrement
     @Column(name="id_usuario") //Para que ubique a que columna agregar el valor
     Long idUsuario;
-    @Column(name="user")
+    @Column(name="user", nullable = false)
     String user;
-    @Column(name="password")
+    @Column(name="password", nullable = false)
     String password;
-    @Column(name="email")
+    @Column(name="email", nullable = false)
     String email;
-    @Column(name="es_admin")
-    boolean esAdmin;
-    @Column(name="fecha_creacion")
+    @Enumerated(EnumType.STRING)
+    Role role;
+    @Column(name="fecha_creacion", nullable = false)
     final LocalDate fechaCreacion = LocalDate.now();
     @Column(name="inicio_suspension")
     LocalDateTime inicioSuspension;
@@ -50,7 +53,6 @@ public class Usuario implements UserDetails {
         this.user = user;
         this.password = password;
         this.email = email;
-        esAdmin = false;
         inicioSuspension = null;
         finSuspension = null;
         baneado = false;
@@ -62,7 +64,8 @@ public class Usuario implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override

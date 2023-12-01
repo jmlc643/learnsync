@@ -28,73 +28,11 @@ public class UserService {
 
     @Autowired
     UserRepository userRepository;
-    @Autowired JwtTokenUtil jwtTokenUtil;
-    @Autowired
-    AuthenticationManager authenticationManager;
-    @Autowired
-    ConfirmationTokenRepository confirmationTokenRepository;
-    @Autowired EmailService emailService;
+
 
 
     public List<Usuario> listarUsuarios() {
         return userRepository.findAll();
-    }
-
-    public Usuario guardarUsuario(Usuario usuario) {
-        //ResponseEntity<T> Para evitar que se metan a URL's donde no tengan permisos.
-        if(userRepository.existsUsuarioByUser(usuario.getUser())){
-            throw new ResourceAlreadyExistsException("El usuario "+usuario.getUser()+" existe");
-        }
-        if(userRepository.existsUsuarioByEmail(usuario.getEmail())){
-            throw new ResourceAlreadyExistsException("El email ya ha sido usado para la creación de otro usuario");
-        }/*
-        String token = generarToken(usuario);
-        enviarEmail(token);
-        */
-        usuario.setEnable(true);
-        return userRepository.save(usuario);
-    }
-
-    private void enviarEmail(String token) {
-        String url = "localhost:8080/user/confirmation-token?"+token;
-
-    }
-
-    public ConfirmationToken encontrarToken(String token){
-        if(!confirmationTokenRepository.existsConfirmationTokenByToken(token)){
-            throw new ResourceNotExistsException("Token no válido");
-        }
-        return confirmationTokenRepository.findByToken(token);
-    }
-
-    public void ConfirmarCuenta(String token){
-        ConfirmationToken confirmationToken = encontrarToken(token);
-        if(confirmationToken.getFechaActivacion() != null){
-            throw new EmailConfirmedException("Este email ya ha sido confirmado");
-        }
-        LocalDateTime fechaExpiracion = confirmationToken.getFechaExpiracion();
-        if(fechaExpiracion.isBefore(LocalDateTime.now())){
-            throw new ExpiredToken("Token expirado");
-        }
-        confirmationToken.setFechaActivacion(LocalDateTime.now());
-        Usuario usuario = confirmationToken.getUsuario();
-        usuario.setEnable(true);
-        guardarCambios(usuario);
-    }
-
-    public String recuperarContraseña(RecuperarContraRequest request){
-        Usuario usuario = encontrarUsuarioPorEmail(request.getEmail());
-        String mensaje = "Hola "+usuario.getUser()+"\nTú has solicitado la recuperación de tu contraseña y Learnsync se encarga de ayudar a sus usuarios en problemas como este." +
-                "\nSu contraseña es "+usuario.getPassword()+", ahora podrá autenticarse en Learnsync para hacer uso de sus funcionalidades.";
-        emailService.sendEmail(request.getEmail(), "Recuperar contraseña", mensaje);
-        return "Correo enviado, revise su bandeja de entrada";
-    }
-
-    public String generarToken(Usuario usuario){
-        String token = UUID.randomUUID().toString();
-        ConfirmationToken confirmationToken = new ConfirmationToken(null, token, usuario);
-        confirmationTokenRepository.save(confirmationToken);
-        return token;
     }
 
     public Usuario encontrarUsuarioPorUser(String user) {
@@ -110,20 +48,6 @@ public class UserService {
         }
         return userRepository.findByEmail(email);
     }
-
-    public AuthenticationUserResponse autenticarUsuario(AuthenticationUserRequest request) throws Exception {
-        Optional<Usuario> usuario = Optional.ofNullable(userRepository.findByUser(request.getUser()));
-        if(usuario.isPresent()){
-            try{
-                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUser(), request.getPassword()));
-                return new AuthenticationUserResponse(EncryptionUtil.encrypt(jwtTokenUtil.generateToken(usuario.get())));
-            }catch (AuthenticationException e){
-                //pass to the throw.
-            }
-        }
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Usuario y/o password incorrectos");
-    }
-
     public Usuario guardarCambios(Usuario usuario){return userRepository.saveAndFlush(usuario);}
 
     public Usuario suspenderUsuario(SuspendedUserRequest request){
