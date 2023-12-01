@@ -33,5 +33,5 @@ public class Flashcard {
 
     @Lob
     @Column(name = "archivo")
-    byte[] archivo;
+    byte[] archivo; //filestream
 }

@@ -13,6 +13,7 @@ import com.learnsyc.appweb.util.EncryptionUtil;
 import com.learnsyc.appweb.util.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
@@ -40,6 +41,7 @@ public class UserService {
     }
 
     public Usuario guardarUsuario(Usuario usuario) {
+        //ResponseEntity<T> Para evitar que se metan a URL's donde no tengan permisos.
         if(userRepository.existsUsuarioByUser(usuario.getUser())){
             throw new ResourceAlreadyExistsException("El usuario "+usuario.getUser()+" existe");
         }
