@@ -53,6 +53,7 @@ public class Usuario implements UserDetails {
         this.user = user;
         this.password = password;
         this.email = email;
+        role = Role.STUDENT;
         inicioSuspension = null;
         finSuspension = null;
         baneado = false;

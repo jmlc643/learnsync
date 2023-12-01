@@ -23,9 +23,8 @@ public class AutenticacionController {
     private AutenticacionServices autenticacionServices;
 
     @PostMapping("/register/")
-    public Usuario crearUsuario(@Valid @RequestBody SaveUserRequest request) {
-        Usuario usuario = new Usuario(null, request.getUser(), request.getPassword(), request.getEmail());
-        return autenticacionServices.guardarUsuario(usuario);
+    public AuthenticationUserResponse crearUsuario(@Valid @RequestBody SaveUserRequest request) {
+        return autenticacionServices.registrarUsuario(request);
     }
 
     @PostMapping("/recuperar-contra/")

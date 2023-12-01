@@ -36,10 +36,11 @@ public class UserService {
     }
 
     public Usuario encontrarUsuarioPorUser(String user) {
-        if(!userRepository.existsUsuarioByUser(user)){
+        Optional<Usuario> usuario = userRepository.findByUser(user);
+        if(usuario.isEmpty()){
             throw new ResourceNotExistsException("El usuario "+user+" no existe");
         }
-        return userRepository.findByUser(user);
+        return usuario.get();
     }
 
     public Usuario encontrarUsuarioPorEmail(String email){

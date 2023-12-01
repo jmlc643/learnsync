@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -33,6 +34,7 @@ public class SecurityConfig {
 
     @Autowired
     private LoggingFilter loggingFilter;
+    @Autowired private AuthenticationProvider authProvider;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
@@ -45,7 +47,8 @@ public class SecurityConfig {
                 // make sure we use stateless session; session won't be used to
                 //.exceptionHandling((it) -> it.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 // store user's state.
-                .sessionManagement((it) -> it.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                .sessionManagement((it) -> it.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authProvider);
 
         // Add a filter to log the request-response of every request
         httpSecurity.addFilterBefore(loggingFilter, UsernamePasswordAuthenticationFilter.class);
@@ -54,24 +57,9 @@ public class SecurityConfig {
         return httpSecurity.build();
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        logger.debug("AuthenticationManager invoked.");
-        return authenticationConfiguration.getAuthenticationManager();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        logger.debug("PasswordEncoder invoked.");
-        // return new BCryptPasswordEncoder();
-        return NoOpPasswordEncoder.getInstance();
-    }
-
     private RequestMatcher publicEndPoints(){
         return new OrRequestMatcher(
-                new AntPathRequestMatcher("/user/register/"),
-                new AntPathRequestMatcher("/user/authentication/"),
-                new AntPathRequestMatcher("/user/recuperar-contra/")
+                new AntPathRequestMatcher("/autenticacion/**")
         );
     }
 }
