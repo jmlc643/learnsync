@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("premio")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "https://boisterous-sopapillas-1c3767.netlify.app/"})
 public class PremioController {
     @Autowired
     PremioService premioService;

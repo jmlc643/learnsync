@@ -15,7 +15,7 @@ import com.learnsyc.appweb.services.TopicoService;
 
 @RestController
 @RequestMapping("topico")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "https://boisterous-sopapillas-1c3767.netlify.app/"})
 public class TopicoController {
     @Autowired TopicoService topicoService;
     @Autowired CategoriaService categoriaService;
