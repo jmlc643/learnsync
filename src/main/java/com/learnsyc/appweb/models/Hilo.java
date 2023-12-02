@@ -21,7 +21,11 @@ public class Hilo {
     @Column(name="cerrado")
     boolean cerrado;
     @Column(name="fecha_creacion")
-    final LocalDate fechaCreacion = LocalDate.now(); //Cambiar a LocalDateTime
+    final LocalDate fechaCreacion = LocalDate.now(); //Cambiar a LocalDateTime@Lob
+    @Lob
+    @Column(name = "archivo")
+    byte[] archivo;
+
     @JoinColumns({
             @JoinColumn(name="id_topico", referencedColumnName="id_topico")
     })
@@ -33,12 +37,13 @@ public class Hilo {
     })
     @ManyToOne
     Usuario usuario;
-    public Hilo(Long idHilo, String titulo, String mensaje, Topico topico, Usuario usuario){
+    public Hilo(Long idHilo, String titulo, String mensaje, Topico topico, Usuario usuario, byte[] archivo){
         this.idHilo = idHilo;
         this.titulo = titulo;
         this.mensaje = mensaje;
         cerrado = false;
         this.topico = topico;
         this.usuario = usuario;
+        this.archivo = archivo;
     }
 }

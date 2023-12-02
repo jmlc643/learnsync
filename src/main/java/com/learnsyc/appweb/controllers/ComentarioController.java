@@ -33,7 +33,7 @@ public class ComentarioController {
     public Comentario crearComentario(@Valid @RequestBody SaveComentarioRequest request){
         Usuario usuario = userService.encontrarUsuarioPorUser(request.getUsername());
         Hilo hilo = hiloService.encontrarHilo(request.getIdHilo());
-        Comentario comentario = new Comentario(null, request.getMensaje(), hilo, usuario);
+        Comentario comentario = new Comentario(null, request.getMensaje(), hilo, usuario, null);
         return comentarioService.guardarComentario(comentario);
     }
 
