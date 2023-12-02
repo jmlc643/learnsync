@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 //spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5Dialect -> Ignorar
 @RestController
 @RequestMapping("flashcard")
-@CrossOrigin(origins = {"http://localhost:4200", "https://boisterous-sopapillas-1c3767.netlify.app/"})
+@CrossOrigin(origins = {"https://boisterous-sopapillas-1c3767.netlify.app"})
 public class FlashCardController {
 
     @Autowired FlashcardService flashcardService;

@@ -13,7 +13,7 @@ import com.learnsyc.appweb.serializers.usuario.AuthenticationUserResponse;
 
 @RestController
 @RequestMapping("autenticacion")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "https://boisterous-sopapillas-1c3767.netlify.app")
 public class AutenticacionController {
 
     @Autowired
