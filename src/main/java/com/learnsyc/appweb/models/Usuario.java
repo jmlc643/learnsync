@@ -13,7 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Data //Construye métodos Set, Get, toString
-@Table(name="usuarios", uniqueConstraints = {@UniqueConstraint(columnNames = {"user", "email"})}) //Da a entender que sera un modelo de base de datos
+@Table(name="usuarios", uniqueConstraints = {@UniqueConstraint(columnNames = {"usuario", "email"})}) //Da a entender que sera un modelo de base de datos
 @Entity //Da a entender que sera una entidad de base de datos
 @NoArgsConstructor //Genera constructor vacio
 public class Usuario implements UserDetails {
@@ -21,7 +21,7 @@ public class Usuario implements UserDetails {
     @GeneratedValue(strategy= GenerationType.AUTO) //Hace un autoincrement
     @Column(name="id_usuario") //Para que ubique a que columna agregar el valor
     Long idUsuario;
-    @Column(name="user", nullable = false)
+    @Column(name="usuario", nullable = false)
     String user;
     @Column(name="password", nullable = false)
     String password;
