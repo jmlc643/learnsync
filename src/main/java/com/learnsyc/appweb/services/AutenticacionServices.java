@@ -75,8 +75,9 @@ public class AutenticacionServices {
 
     public String recuperarContraseña(RecuperarContraRequest request){
         Usuario usuario = userService.encontrarUsuarioPorEmail(request.getEmail());
+        String password = EncryptionUtil.decrypt(usuario.getPassword());
         String mensaje = "Hola "+usuario.getUser()+"\nTú has solicitado la recuperación de tu contraseña y Learnsync se encarga de ayudar a sus usuarios en problemas como este." +
-                "\nSu contraseña es "+usuario.getPassword()+", ahora podrá autenticarse en Learnsync para hacer uso de sus funcionalidades.";
+                "\nSu contraseña es "+password+", ahora podrá autenticarse en Learnsync para hacer uso de sus funcionalidades.";
         emailService.sendEmail(request.getEmail(), "Recuperar contraseña", mensaje);
         return "Correo enviado, revise su bandeja de entrada";
     }
