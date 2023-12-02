@@ -13,12 +13,12 @@ import com.learnsyc.appweb.services.CategoriaService;
 
 @RestController
 @RequestMapping("categoria")
-@CrossOrigin(origins = {"http://localhost:4200", "https://boisterous-sopapillas-1c3767.netlify.app/"})
+@CrossOrigin(origins = "http://localhost:4200")
 public class CategoriaController {
-    
+
     @Autowired CategoriaService categoriaService; 
 
-    @GetMapping("/")
+    @GetMapping("/listar/")
     public List<CategoriaSerializer> listarCategoria() {
         return categoriaService.listarCategorias().stream().map((it) -> new CategoriaSerializer(it.getNombre(), it.getDescripcion())).toList();
     }

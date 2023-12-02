@@ -1,6 +1,5 @@
 package com.learnsyc.appweb.controllers;
 
-import com.learnsyc.appweb.models.Usuario;
 import com.learnsyc.appweb.serializers.usuario.RecuperarContraRequest;
 import com.learnsyc.appweb.serializers.usuario.SaveUserRequest;
 import jakarta.validation.Valid;

@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -40,10 +41,14 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
         logger.debug("SecurityConfig initialized.");
         // We don't need CSRF for this example
+        httpSecurity.cors(AbstractHttpConfigurer::disable);
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 // don't authenticate this particular request
                 // all other requests need to be authenticated
-                .authorizeHttpRequests((it) -> it.requestMatchers(publicEndPoints()).permitAll().anyRequest().authenticated())
+                .authorizeHttpRequests((it) -> it
+                        .requestMatchers(HttpMethod.GET).permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS).permitAll()
+                        .requestMatchers(publicEndPoints()).permitAll().anyRequest().authenticated())
                 // make sure we use stateless session; session won't be used to
                 //.exceptionHandling((it) -> it.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 // store user's state.
